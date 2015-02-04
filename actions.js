@@ -82,7 +82,6 @@ $(document).ready(function() {
 	throwWords();
 
 	function throwWords(){
-		console.log("falling Lapse: " + levels[level].fallingLapse);
 		interval = setInterval(function () {
 		    //moving word down
 		    var random = getRandom(words.length);
@@ -91,8 +90,6 @@ $(document).ready(function() {
 
 		    //removing the word from our words array
 		    words.splice(random, 1);
-
-		    console.log("lanzo: " + cont);
 
 		    word.addClass('active');
 	    	setSpeed(word, level);
