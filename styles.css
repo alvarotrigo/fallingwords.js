@@ -60,6 +60,7 @@ body,html{
 }
 span.active {
     color: red;
+    border-bottom: 1px solid red;
 }
 .game {
     width: 900px;
@@ -69,6 +70,7 @@ span.active {
     border-bottom: 4px solid #d8d8d8;
     display:block;
     position: relative;
+    overflow: hidden;
 }
 .gameOver {
     font-size: 4em;
