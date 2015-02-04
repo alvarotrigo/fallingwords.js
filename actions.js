@@ -45,7 +45,8 @@ $(document).ready(function() {
 
 	var speed = 18*1000;
 	var fallingLapse = 4000;
-	var level = 1;
+	var soundEnabled = true;
+	var level = 6;
 
 	var easing = 'ease-out';
 	var scenario = { width: $('.game').width() };
@@ -66,7 +67,11 @@ $(document).ready(function() {
 
 	var activeLetters = {};
 	$('.word').each(function(){
-	    $(this).css('left', getRandom(scenario.width));
+		var left = getRandom(scenario.width);
+		if (left + $(this).width() >= scenario.width){
+			left = left - $(this).width() - 30;
+		}
+	    $(this).css('left', left);
 	    activeLetters[$(this).data('word')] = 0;
 	});
 
@@ -101,7 +106,7 @@ $(document).ready(function() {
 
 		        //lapse between levels
 		        setTimeout(function(){
-		            $('.text').fadeOut().html('').delay(500).html("Level" + level).fadeIn();
+		            $('.text span').fadeOut().html('').delay(500).html("Level" + level).fadeIn();
 
 		        	throwWords();
 		        }, 4000);
@@ -121,6 +126,7 @@ $(document).ready(function() {
 	        if($(this).is(':first-child') ||  $(this).prev().hasClass('active')){
 	            console.log("is in progress: " + isWordInProgress(wordText));
 	            if ($(this).text() == value && isWordInProgress(wordText)) {
+	            	playSound('hit');
 	                $(this).addClass('active');
 	                activeLetters[wordText]++;
 
@@ -130,6 +136,8 @@ $(document).ready(function() {
 	                     $(this).closest('.word').remove();
 	                    delete activeLetters[wordText];
 	                }
+	            }else{
+	            	playSound('noLetter');
 	            }
 	        }
 	    });
@@ -198,6 +206,38 @@ $(document).ready(function() {
 	    $('.game').append('<div class="gameOver"><div>Game Over</div></div>');
 	}
 
+
+	 /**
+     * Notification sound for every browser.
+     */
+    function playSound(fileName){
+        if(soundEnabled){
+            var audioElement = document.createElement('audio');
+
+            if (!isMpeg()) {
+                audioElement.setAttribute('src', "audio/" + fileName + ".ogg");
+                audioElement.setAttribute('type', 'audio/ogg');
+            }else{
+                audioElement.setAttribute('src', "audio/" + fileName + ".mp3");
+                audioElement.setAttribute('type', 'audio/mpeg');
+            }
+
+            audioElement.setAttribute('autoplay', 'autoplay');
+
+            audioElement.addEventListener("load", function() {
+                audioElement.play();
+            }, true);
+
+            return audioElement;
+        }
+    }
+
+
+    //http://stackoverflow.com/questions/17791602/sound-notifications-in-opera
+    function isMpeg(){
+        var a = document.createElement('audio');
+        return !!(a.canPlayType && a.canPlayType('audio/mpeg;').replace(/no/, ''));
+    }
 
 });
 
