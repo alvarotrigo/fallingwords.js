@@ -54,13 +54,14 @@ body,html{
 .word {
     position: absolute;
     top: -20px;
+    color: #f2f2f2;
 }
 .word.active {
     top: 600px;
 }
-span.active {
-    color: red;
-    border-bottom: 1px solid red;
+.word span.active {
+    color: #34495e;
+    border-bottom: 1px solid #34495e;
 }
 .game {
     width: 900px;
@@ -71,6 +72,20 @@ span.active {
     display:block;
     position: relative;
     overflow: hidden;
+    background-image: url(imgs/bg.png);
+    background-repeat: repeat;
+}
+.missile{
+    top:110%;
+    position: absolute;
+    color: #000;
+    font-weight: bold;
+    font-size: 16px;
+    transition: all 4000ms ease-out;
+    -webkit-transition: all 4000ms ease-out;
+}
+.missile.active{
+    top: -10%;
 }
 .gameOver {
     font-size: 4em;
