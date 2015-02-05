@@ -76,16 +76,13 @@ body,html{
     background-repeat: repeat;
 }
 .missile{
-    top:110%;
+    bottom: -15px;
     position: absolute;
-    color: #000;
+    color: #fff;
     font-weight: bold;
     font-size: 16px;
-    transition: all 4000ms ease-out;
-    -webkit-transition: all 4000ms ease-out;
-}
-.missile.active{
-    top: -10%;
+    transition: transform 4000ms ease-out;
+    -webkit-transition: -webkit-transform 4000ms ease-out;
 }
 .gameOver {
     font-size: 4em;
