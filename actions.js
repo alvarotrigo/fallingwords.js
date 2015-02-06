@@ -1,13 +1,29 @@
 $(document).ready(function() {
-	//var words = [{"word":"A-gays"},{"word":"Achaea"},{"word":"Ailantus"},{"word":"Anglian"},{"word":"Babylonia"},{"word":"Bakelite"},{"word":"Barbary"},{"word":"Bertie"},{"word":"Bruegel"},{"word":"Burbage"},{"word":"Carter"},{"word":"Caxton"},{"word":"Chameleon"},{"word":"Chechnya"},{"word":"Chleuh"},{"word":"Coalsack"},{"word":"Corbin"},{"word":"Dekker"},{"word":"Dreaming"},{"word":"Erica"},{"word":"Galiza"},{"word":"Gaussian"},{"word":"Georgians"},{"word":"Gironde"},{"word":"Guendolen"},{"word":"Haley"},{"word":"Hawkeye"},{"word":"Iviza"},{"word":"Jinan"},{"word":"Joannes"},{"word":"Lammas"},{"word":"Lanner"},{"word":"Leninism"},{"word":"Lilia"},{"word":"Logroño"},{"word":"Marat"},{"word":"Mawlamyine"},{"word":"Media"},{"word":"Memphis"},{"word":"Midianites"},{"word":"Modon"},{"word":"Mohican"},{"word":"Montespan"},{"word":"Notts"},{"word":"Novembr"},{"word":"O'Reilly"},{"word":"Odinist"},{"word":"Paulist"},{"word":"Podolsk"},{"word":"Powell"},{"word":"Rising Sun"},{"word":"Sagamihara"},{"word":"Santa Ana"},{"word":"Scotticism"},{"word":"Scouters"},{"word":"Sofians"},{"word":"Stettin"},{"word":"Stilwell"},{"word":"Tereus"},{"word":"Timur"},{"word":"Unixy"},{"word":"Velachery"},{"word":"West Allis"},{"word":"Wynette"},{"word":"Zinsser"},{"word":"abrogating"},{"word":"acerbic"},{"word":"adenoma"},{"word":"adiabats"},{"word":"adsorbents"},{"word":"adsorptive"},{"word":"adulterer"},{"word":"afeared"},{"word":"afflicteth"},{"word":"afforests"},{"word":"agamic"},{"word":"aging"},{"word":"airlocks"},{"word":"alcabala"},{"word":"aliquoting"},{"word":"aliskiren"},{"word":"aller"},{"word":"amethyst"},{"word":"amper"},{"word":"anchovy"},{"word":"anthills"},{"word":"antifolk"},{"word":"apathist"},{"word":"aport"},{"word":"arboreous"},{"word":"arbours"},{"word":"armourers"},{"word":"assinine"},{"word":"attics"},{"word":"avenue"},{"word":"avidness"},{"word":"ballistae"},{"word":"bandolier"},{"word":"barratry"},{"word":"bashaw"},{"word":"bazaars"},{"word":"beaute"},{"word":"begynnynge"},{"word":"believable"},{"word":"bellyflop"},{"word":"besties"},{"word":"biggish"},{"word":"billowy"},{"word":"bolide"},{"word":"bolshies"},{"word":"bookishly"},{"word":"boongs"},{"word":"boudoir"},{"word":"brassic"},{"word":"breather"},{"word":"britch"},{"word":"broadside"},{"word":"browned"},{"word":"bugfree"},{"word":"bumming"},{"word":"by-wash"},{"word":"cached"},{"word":"cacography"},{"word":"cafetorium"},{"word":"call-board"},{"word":"cambered"},{"word":"carnage"},{"word":"carom"},{"word":"carthorse"},{"word":"catalysts"},{"word":"cavernlike"},{"word":"celebrates"},{"word":"chagan"},{"word":"chalazae"},{"word":"chartists"},{"word":"cheapen"},{"word":"chicaned"},{"word":"chits"},{"word":"cingulum"},{"word":"clamberer"},{"word":"clasper"},{"word":"clientage"},{"word":"co-wives"},{"word":"coagulants"},{"word":"cob-house"},{"word":"coffinlike"},{"word":"coital"},{"word":"comic"},{"word":"conduit"},{"word":"confusions"},{"word":"connotate"},{"word":"contrasts"},{"word":"corbet"},{"word":"corrival"},{"word":"corrupter"},{"word":"crocks"},{"word":"cumbering"},{"word":"daftest"},{"word":"datarates"},{"word":"dealign"},{"word":"debatably"},{"word":"decalin"},{"word":"deictic"},{"word":"deskwork"},{"word":"dinitrate"},{"word":"diode"},{"word":"discede"},{"word":"discretize"},{"word":"disjoins"},{"word":"disputer"},{"word":"ditambah"},{"word":"djembe"},{"word":"doesnt"},{"word":"dognappers"},{"word":"dominions"},{"word":"dorme"},{"word":"doubters"},{"word":"downdraft"},{"word":"doxepin"},{"word":"dressable"},{"word":"drift-ice"},{"word":"dwell"},{"word":"dynamite"},{"word":"echoey"},{"word":"ecstatical"},{"word":"editting"},{"word":"educator"},{"word":"embracive"},{"word":"en-suite"},{"word":"enmity"},{"word":"entitling"},{"word":"eoraptor"},{"word":"episternal"},{"word":"equatable"},{"word":"erotical"},{"word":"escheats"},{"word":"evaded"},{"word":"exonerates"},{"word":"extracted"},{"word":"eyecup"},{"word":"facedown"},{"word":"fades"},{"word":"faggoting"},{"word":"fateless"},{"word":"faulter"},{"word":"feaster"},{"word":"ferally"},{"word":"fetishize"},{"word":"fillip"},{"word":"finalizing"},{"word":"fineless"},{"word":"firelog"},{"word":"firings"},{"word":"fissure"},{"word":"fitters"},{"word":"fjordlike"},{"word":"flabbier"},{"word":"flaff"},{"word":"flashboard"},{"word":"flowed"},{"word":"follet"},{"word":"footgear"},{"word":"foregather"},{"word":"fosterage"},{"word":"foxberry"},{"word":"frigates"},{"word":"frighting"},{"word":"frotteur"},{"word":"furigana"},{"word":"fuscous"},{"word":"galingale"},{"word":"garnished"},{"word":"gastrin"},{"word":"gemstones"},{"word":"ghoti"},{"word":"giantish"},{"word":"gingerous"},{"word":"gjetost"},{"word":"go-go"},{"word":"godmother"},{"word":"goujons"},{"word":"gravesite"},{"word":"guitarfish"},{"word":"half-uncle"},{"word":"handers"},{"word":"handing"},{"word":"hawbuck"},{"word":"hepps"},{"word":"hissyfit"},{"word":"hittable"},{"word":"hobbly"},{"word":"homemaker"},{"word":"honey"},{"word":"honied"},{"word":"horse-boy"},{"word":"horsehair"},{"word":"hortatives"},{"word":"hothoused"},{"word":"ice-skates"},{"word":"incubators"},{"word":"infare"},{"word":"insipidly"},{"word":"interferon"},{"word":"ivied"},{"word":"jam-packed"},{"word":"japanned"},{"word":"jeoparding"},{"word":"jointing"},{"word":"kalima"},{"word":"katmandu"},{"word":"keycodes"},{"word":"kiloliters"},{"word":"kinit"},{"word":"knotte"},{"word":"knouted"},{"word":"knuckly"},{"word":"landskips"},{"word":"laned"},{"word":"latter"},{"word":"legate"},{"word":"legatura"},{"word":"leggie"},{"word":"lidded"},{"word":"life-guard"},{"word":"loadable"},{"word":"lolcats"},{"word":"longyi"},{"word":"loopers"},{"word":"looters"},{"word":"loquacious"},{"word":"lorica"},{"word":"low-priced"},{"word":"lychgate"},{"word":"madame"},{"word":"madge"},{"word":"managed"},{"word":"mawashi"},{"word":"medevac"},{"word":"medullated"},{"word":"meire"},{"word":"meninges"},{"word":"meshy"},{"word":"mesjid"},{"word":"mildewing"},{"word":"misdialed"},{"word":"misprize"},{"word":"monoids"},{"word":"monomachy"},{"word":"movings"},{"word":"mycetes"},{"word":"nabit"},{"word":"near-blind"},{"word":"nearest"},{"word":"negotiate"},{"word":"nigella"},{"word":"nogoodniks"},{"word":"nonplayer"},{"word":"nooky"},{"word":"noria"},{"word":"nother"},{"word":"numbs"},{"word":"négligée"},{"word":"obtuseness"},{"word":"odorously"},{"word":"one-celled"},{"word":"ophiolites"},{"word":"orogeny"},{"word":"oscines"},{"word":"outclass"},{"word":"outgive"},{"word":"ovenlike"},{"word":"owning"},{"word":"oxidisers"},{"word":"oxymel"},{"word":"pacing"},{"word":"pagus"},{"word":"palettes"},{"word":"palolo"},{"word":"palters"},{"word":"pantlegs"},{"word":"paraben"},{"word":"pardah"},{"word":"partlet"},{"word":"peludo"},{"word":"pemican"},{"word":"pending"},{"word":"phosphoric"},{"word":"photoshop"},{"word":"piddled"},{"word":"pilau"},{"word":"piper"},{"word":"pisang"},{"word":"pisky"},{"word":"plaints"},{"word":"plumery"},{"word":"political"},{"word":"polypoidal"},{"word":"polypore"},{"word":"pomato"},{"word":"positron"},{"word":"power-up"},{"word":"prated"},{"word":"preleased"},{"word":"presagers"},{"word":"presider"},{"word":"privileges"},{"word":"problemed"},{"word":"promise"},{"word":"publicizes"},{"word":"purgation"},{"word":"putamen"},{"word":"pyrex"},{"word":"quadrantes"},{"word":"quilombo"},{"word":"quotum"},{"word":"ramadas"},{"word":"ranching"},{"word":"rapacity"},{"word":"rased"},{"word":"raunchy"},{"word":"refolded"},{"word":"regardless"},{"word":"regelate"},{"word":"rejectable"},{"word":"reoffering"},{"word":"repairmen"},{"word":"repointed"},{"word":"resid"},{"word":"restruck"},{"word":"resumption"},{"word":"rethread"},{"word":"revealment"},{"word":"revest"},{"word":"rhone"},{"word":"ricochets"},{"word":"riesling"},{"word":"rifted"},{"word":"ringside"},{"word":"risers"},{"word":"roaringly"},{"word":"rockmelon"},{"word":"rose-red"},{"word":"sandpiles"},{"word":"saxophones"},{"word":"scramming"},{"word":"scroll"},{"word":"scuppers"},{"word":"seedeaters"},{"word":"self-aware"},{"word":"shadowers"},{"word":"shadowlike"},{"word":"sharara"},{"word":"sheened"},{"word":"shoeful"},{"word":"shot-guns"},{"word":"sigil"},{"word":"skillions"},{"word":"skoff"},{"word":"slavered"},{"word":"slogged"},{"word":"slowcoach"},{"word":"smokier"},{"word":"sniggerers"},{"word":"snowdog"},{"word":"snuck"},{"word":"snudge"},{"word":"sodger"},{"word":"soles"},{"word":"sous-chef"},{"word":"spawns"},{"word":"spittoons"},{"word":"splain"},{"word":"steepish"},{"word":"sterility"},{"word":"stirringly"},{"word":"struldbrug"},{"word":"subplots"},{"word":"subtrees"},{"word":"sural"},{"word":"swappable"},{"word":"syrup"},{"word":"tap-hole"},{"word":"teak-tree"},{"word":"tehsils"},{"word":"temption"},{"word":"terat"},{"word":"thallium"},{"word":"thawy"},{"word":"theorise"},{"word":"thymocytes"},{"word":"time-gun"},{"word":"timepoints"},{"word":"tiros"},{"word":"toling"},{"word":"tongued"},{"word":"tootled"},{"word":"touting"},{"word":"triacle"},{"word":"triatomic"},{"word":"tubercules"},{"word":"tuskers"},{"word":"typescript"},{"word":"ulceration"},{"word":"unberufen"},{"word":"uncunning"},{"word":"uneligible"},{"word":"united"},{"word":"unranked"},{"word":"unseized"},{"word":"unsolid"},{"word":"uroscopy"},{"word":"utilized"},{"word":"valdecoxib"},{"word":"valure"},{"word":"vampish"},{"word":"varoom"},{"word":"vastest"},{"word":"vaulter"},{"word":"versicolor"},{"word":"vicarius"},{"word":"vice-dean"},{"word":"visualised"},{"word":"warmup"},{"word":"washeteria"},{"word":"water-pig"},{"word":"waterbus"},{"word":"welldoing"},{"word":"whammo"},{"word":"wheals"},{"word":"whitings"},{"word":"wholesales"},{"word":"willn't"},{"word":"woodstove"},{"word":"wroken"},{"word":"xiphoid"},{"word":"xylenes"},{"word":"yetis"},{"word":"yinzer"},{"word":"younguns"},{"word":"zealously"}];
+	//words should fit the "id" format
+	var words = ['unbrave','unbruised','journeyer','ives','ursa','contented','ionian','maize','geordie','tanbark','gruelling','saadi','snowbound','glegness','eternise','augmentor','kinfolks','consist','point','pouter','precisian','sundew','tomium','sparrow','delative','polyxenus','unawake','undue','darius','pannage','chillum','amanda','lam','nicotine','handiwork','dumpily','beadily','sukkoth','bonelike','hylozoic','puss','gibbon','suharto','molasses','checkroom','agora','mobocracy','cosiest','slatier','anarch','redundant','corpora','spinozism','kloesse','xanthous','ozocerite','maremma','sleepers','swit','fare','lunated','meleager','prevision','tumaco','unfetter','emissary','botvinnik','rev','giorgione','exciting','famished','kenova','unhuddle','kubango','prelect','hard','andoroba','nauch','publicity','apodemal','argyle','bismarck','hottest','expansile','bigger','poromeric','heron','jungfrau','oidia','pandavas','razeeing','zymologic','roseless','delicia','agacles','unjuicily','coalesce','revoting','thimphu','anatomy','feminie','pyxidia','parousia','shabbier','tempura','vagal','diatribe','deftly','ava','ginkgo','unexhumed','cocoyam','aydelotte','connexion','bagh','alost','machinist','sloane','china','attingent','pustule','yirr','valdosta','interlace','popish','unknelled','redenied','phallus','epaulet','unechoic','angora','church','teledu','quickly','reground','runty','cheshire','scurrile','sheeney','fathomer','sarasvati','gypsyism','ignition','spewer','tankless','unusurped','vale','rejection','anxiety','lacuna','madonna','wider','profferer','sporty','markevich','burger','ephippia','jail','davey','molise','aft','forth','caldaria','outjet','zionist','halachot','recourse','margareta','danseuse','kamet','redefeat','ivor','sitzkrieg','judaea','dupr','backward','gari','discomfit','calgary','complice','colonised','mass','pretender','unionize','manoeuvre','holloaed','paccha','nereid','cardhouse','unfacile','bouillon','accessory','american','unequal','quidnunc','observe','irishised','hoylake','tarried','decried','merl','urolith','trustable','similarly','melpomene','fraught','mango','dana','palencia','margin','zibeline','elucidate','nouma','cete','larum','unpeopled','kanji','unstrewn','aslant','bing','shovel','firework','rampager','antipodes','phrensied','eulogy','idiotise','adamant','preguess','showmanly','tendril','felicidad','liou','senza','ambulated','siloxane','cunt','scientist','illumed','unsmooth','agonist','pyalla','submiss','celluloid','flighty','apriorism','minuend','choicer','preexact','fushun','contusion','acol','foreskin','hostaging','lynchet','atresia','exalter','adieus','unflowing','cousinry','quittable','atomist','rooflike','gavotte','faunally','steampipe','canoodle','unsponged','boltlike','penance','podiums','commit','finalize','landsmaal','natant','tropical','enigma','ticknor','nastiness','varicose','kopje','umbonal','vignette','warded','rainbird','mewar','bullet','narceine','leangle','curtesy','devastate','furrily','strobic','theomancy','mfd','embolus','perutz','eurhythmy','sayers','shapka','goadlike','timbale','ligating','cutwater','salmon','fretwork','mobutu','descartes','craftiest','idyll','capsid','handsewn','abbotcy','absonant','deface','scroop','rort','pup','incarnate','kirigami','frog','unicycle','burgher','allobaric','bizerta','disjaskit','void','dinkiest','gawkier','duello','boresome','snowcreep','autoharp','begabled','foxberry','lumberer','purer','muticous','auber','topiaries','hereupon','elegantly','ranee','haywire','unbay','sorceries','baker','caucasia','cooing','underfed','biography','nonethnic','ozonizer','bowerlike','cullis','pip','exeter','cloakroom','shembe','mycelium','falderol','saltier','smetana','attrahent','diabolize','vampiric','pretimely','fetial','asterion','topmost','phyton','aseity','autobahn','impinger','draftiest','chapatti','orator','dunedin','beatitude','danbury','greg','celebrate','scrip','pithead','iapigia','carbuncle','manila','holler','marital','bisection','shapable','terrier','gullable','syndromic','overwrite','niceness','athetoid','duka','degummed','floc','wady','dogcart','vatted','deckhead','sapwood','addition','plication','sucrose','stanton','lollardy','befall','teughness','alcalde','galumph','panoptic','oriental','wellesley','mutualism','ductwork','everybody','covin','cosiness','pelican','meagerly','wittily','outshaped','baghlan','kelson','vivace','wagnerite','caboodle','wifelike','foretaste','enuring','aspen','cavatina','durban','dulciana','dissenter','outreckon','richfield','retrorse','kerkyra','diosgenin','engage','pulsating','cheddar','melodist','hide','thiazole','bassano','loppy','dabble','nerve','oncost','kay','usa','hechshers','afire','enfetter','useable','poleax','decameron','subhall','ophore','gentisate','cultigen','ampersand','genetic','unwhite','prologise','brynza','unnipped','jag','keifer','schedular','creosotic','homocercy','trogon','chuprassi','pizzicato','lilyan','enc','heeze','verier','archfiend','nares','sorgho','tuberoid','pickled','peanuts','casemate','frond','ghazi','sloshiest','viand','volta','thespiae','greenberg','brand'];
 
-	var words = [{'word': 'aaaaaa'}, {'word': 'abbb'}, {'word': 'aabb'}, {'word': 'bbbbbbbb'}, {'word': 'ccccccc'}, {'word': 'dddddddd'}, {'word': 'ffffff'}, {'word': 'ggggggg'}, {'word': 'hhhhhhhhh'}, {'word': 'iiiiiii'}, {'word': 'jjjjjjjj'}, {'word': 'qqqqqqq'}, {'word': 'wwwwwww'}, {'word': 'vvvvvvvv'}, {'word': 'mmmmmmmm'}];
+	//var words = [{'word': 'aaaaaa'}, {'word': 'aaaaab'}, {'word': 'aaaaac'}, {'word': 'aaaaad'}];
 	var levels = {
-		'0': {
-	        speed: 29,
+
+		//testing levels
+		'-2': {
+	        speed: 16,
 	        fallingLapse: 1000,
 	        words: 6
 	    },
+	    '-1': {
+	        speed: 16,
+	        fallingLapse: 1000,
+	        words: 6
+	    },
+	    '0': {
+	        speed: 16,
+	        fallingLapse: 1000,
+	        words: 6
+	    },
+
+
+		//game levels
 	    '1': {
 	        speed: 18,
 	        fallingLapse: 3000,
@@ -53,16 +69,19 @@ $(document).ready(function() {
 	var speed = 18*1000;
 	var fallingLapse = 4000;
 	var soundEnabled = true;
-	var level = 0;
+	var level = 2;
+	var game = $('#game');
+	var levelj = $('#level')[0];
 
 	var easing = 'ease-out';
-	var scenario = { width: $('.game').width() };
+	var scenario = { width: game.width() };
 
-	//adding words to the page
-	$.each(words, function (index, value) {
+	var allwords = '';
+
+	//creating the words
+	$.each(words, function (index, wordText) {
 	    var word = '';
-	    var characters = value.word.split('');
-	    var wordText = value.word;
+	    var characters = wordText.split('');
 
 	    //for each character
 	    for (var i = 0; i < characters.length; i++) {
@@ -70,8 +89,12 @@ $(document).ready(function() {
 	        word = word + '<span>' + letter + '</span>';
 	    }
 
-	    $('.game').append('<div class="word" data-word="'+wordText+'" id="'+wordText+'">' + word + '</div>');
+	    allwords = allwords + '<div class="word" data-word="'+wordText+'" id="'+wordText+'">' + word + '</div>';
 	});
+
+	//adding words to the page
+	game.append(allwords);
+	playSound('background');
 
 	var activeLetters = {};
 	$('.word').each(function(){
@@ -92,7 +115,7 @@ $(document).ready(function() {
 	var spliceOne = function(arr, index) {
              var len=arr.length;
              if (!len) { return }
-             while (index<len) { 
+             while (index<len) {
                    arr[index] = arr[index+1]; index++ }
              arr.length--;
     };
@@ -101,14 +124,18 @@ $(document).ready(function() {
 		interval = setInterval(function () {
 		    //moving word down
 		    var random = getRandom(words.length);
-		    var text = words[random].word;
+		    var text = words[random];
 		    var word = $('.word[data-word="'+text+'"]');
 
 		    //removing the word from our words array
 		    spliceOne(words, random);
-
-		    word.addClass('active');
+		    word[0].classList.add('active');
 	    	setSpeed(word, level);
+
+	    	if(cont == 1){
+	            levelj.style.display = 'none';
+	            console.log("hide!!!!");
+	    	}
 
 		    cont++;
 
@@ -119,8 +146,16 @@ $(document).ready(function() {
 
 		        //lapse between levels
 		        setTimeout(function(){
-		            $('.text span').fadeOut().html('').delay(500).html("Level" + level).fadeIn();
+		        	playSound('newLevel');
 
+		        	//hidding current level
+		        	var span = document.getElementById("text").getElementsByTagName("span")[0];
+		        	span.style.display = 'none';
+		            span.innerHTML = level;
+		            levelj.innerHTML = "Level" + level;
+		            levelj.style.display = 'block';
+		            console.log("display!!!");
+		            playSound('newLevel');
 		        	throwWords();
 		        }, 4000);
 
@@ -134,14 +169,14 @@ $(document).ready(function() {
 
 	    //for each non active letter of each active word
 	    $('.word.active').each(function () {
+	    	var word = $(this);
 	    	var currentLetter = $(this).find('span:not(.active)').first();
-	        var word = currentLetter.closest('.word');
-	        var wordText = word.data('word');
+	        var wordText = word[0].getAttribute('data-word');
 
 	        if(currentLetter.is(':first-child') ||  currentLetter.prev().hasClass('active')){
 	            if (currentLetter.text() == value && isWordInProgress(wordText)) {
 	            	playSound('hit');
-	                currentLetter.addClass('active');
+	                currentLetter[0].classList.add('active');
 	                activeLetters[wordText]++;
 
 	                //remove the word, well done!
@@ -173,18 +208,23 @@ $(document).ready(function() {
 	});
 
 	function launchMissile(word){
-        var wordText = word.data('word');
+        var wordj = word[0];
+        var wordText = wordj.getAttribute('data-word');
 		var missile = $('<span class="missile">|</span>');
-		var axisX = word.position().left + word.width() / 2;
+		console.log(wordj.getBoundingClientRect());
+		var axisX = wordj.offsetLeft + wordj.offsetWidth / 2;
 
 		//addCss3Property(missile, 'transition', 'all 4000ms ease');
-		missile.attr('data-word', wordText).css('left', axisX + 'px');
+		missile[0].setAttribute('data-word', wordText);
+		missile[0].style.left = axisX + 'px';
 
-		$('.game').append(missile);
+		console.log(missile);
+
+		game.append(missile);
 
 		//syncronously removing the class after the animation has been applied.
 		setTimeout(function(){
-			addCss3Property(missile, 'transform', 'translateY(-620px)');
+			missile[0].classList.add('active');
 		},10);
 	}
 
@@ -194,10 +234,11 @@ $(document).ready(function() {
 
 			//force reflow (for 3d transformations)
             this.style.visibility = 'visible';
-			
+
 			if( this.getBoundingClientRect().top <= word[0].getBoundingClientRect().top ){
 				$(this).remove();
 				word.remove();
+            	playSound('destroyWord');
 			}
 		});
 	},10);
@@ -265,7 +306,8 @@ $(document).ready(function() {
 
 	function gameOver(){
 	    $('.word').remove();
-	    $('.game').append('<div class="gameOver"><div>Game Over</div></div>');
+	    playSound('gameOver');
+	    $('#game').append('<div class="gameOver"><div>Game Over</div></div>');
 	}
 
 
@@ -289,8 +331,6 @@ $(document).ready(function() {
             audioElement.addEventListener("load", function() {
                 audioElement.play();
             }, true);
-
-            return audioElement;
         }
     }
 

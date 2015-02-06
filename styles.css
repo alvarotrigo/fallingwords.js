@@ -50,6 +50,7 @@ body,html{
     font-family: arial;
     color: #333;
     font-size: 16px;
+    font-family: "Raleway", Helvetica, Arial, "Lucida Grande", sans-serif !important;
 }
 .word {
     position: absolute;
@@ -57,13 +58,19 @@ body,html{
     color: #f2f2f2;
 }
 .word.active {
-    top: 600px;
+    transform: translateY(600px);
+    -ms-transform: translateY(600px);
+    -webkit-transform: -webkit-translateY(600px);
+}
+.word span{
+    margin: 0 1px 0 0;
 }
 .word span.active {
     color: #34495e;
     border-bottom: 1px solid #34495e;
 }
-.game {
+#game {
+    font-size: 17px;
     width: 900px;
     margin: 0 auto;
     padding:0;
@@ -75,6 +82,19 @@ body,html{
     background-image: url(imgs/bg.png);
     background-repeat: repeat;
 }
+#level{
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    right: 0;
+    margin: 0 auto;
+    text-align: center;
+    width: 100%;
+    margin-top: -20px;
+    font-size: 40px;
+    font-weight: bold;
+}
 .missile{
     bottom: -15px;
     position: absolute;
@@ -83,6 +103,11 @@ body,html{
     font-size: 16px;
     transition: transform 4000ms ease-out;
     -webkit-transition: -webkit-transform 4000ms ease-out;
+}
+.missile.active{
+    transform: translateY(-620px);
+    -ms-transform: translateY(-620px);
+    -webkit-transform: -webkit-translateY(-620px);
 }
 .gameOver {
     font-size: 4em;
@@ -101,7 +126,7 @@ body,html{
     text-align:center;
     font-family: arial, helvetica;
 }
-.text{
+#text{
     -webkit-box-sizing: border-box; /* Safari<=5 Android<=3 */
     -moz-box-sizing: border-box; /* <=28 */
     box-sizing: border-box;
