@@ -7,19 +7,19 @@ $(document).ready(function() {
 
 		//testing levels
 		'-2': {
-	        speed: 16,
-	        fallingLapse: 1000,
-	        words: 6
+	        speed: 80,
+	        fallingLapse: 200,
+	        words: 40
 	    },
 	    '-1': {
-	        speed: 16,
-	        fallingLapse: 1000,
-	        words: 6
+	        speed: 80,
+	        fallingLapse: 300,
+	        words: 80
 	    },
 	    '0': {
 	        speed: 16,
-	        fallingLapse: 1000,
-	        words: 6
+	        fallingLapse: 200,
+	        words: 80
 	    },
 
 
@@ -69,14 +69,25 @@ $(document).ready(function() {
 	var speed = 18*1000;
 	var fallingLapse = 4000;
 	var soundEnabled = true;
-	var level = 2;
+	var level = 6;
 	var game = $('#game');
 	var levelj = $('#level')[0];
+	var mysound = [];
+	var sounds = [
+		'gameOver',
+		'background',
+		'newLevel',
+		'destroyWord',
+		'noLetter',
+		'hit'
+	];
+
 
 	var easing = 'ease-out';
 	var scenario = { width: game.width() };
 
 	var allwords = '';
+    createSound('gameOver');
 
 	//creating the words
 	$.each(words, function (index, wordText) {
@@ -94,7 +105,9 @@ $(document).ready(function() {
 
 	//adding words to the page
 	game.append(allwords);
-	playSound('background');
+	createSounds(sounds);
+
+	playSound('background', 'loop');
 
 	var activeLetters = {};
 	$('.word').each(function(){
@@ -134,7 +147,6 @@ $(document).ready(function() {
 
 	    	if(cont == 1){
 	            levelj.style.display = 'none';
-	            console.log("hide!!!!");
 	    	}
 
 		    cont++;
@@ -154,7 +166,6 @@ $(document).ready(function() {
 		            span.innerHTML = level;
 		            levelj.innerHTML = "Level" + level;
 		            levelj.style.display = 'block';
-		            console.log("display!!!");
 		            playSound('newLevel');
 		        	throwWords();
 		        }, 4000);
@@ -174,7 +185,7 @@ $(document).ready(function() {
 	        var wordText = word[0].getAttribute('data-word');
 
 	        if(currentLetter.is(':first-child') ||  currentLetter.prev().hasClass('active')){
-	            if (currentLetter.text() == value && isWordInProgress(wordText)) {
+	            if (isWordInProgress(wordText) && currentLetter.text() == value) {
 	            	playSound('hit');
 	                currentLetter[0].classList.add('active');
 	                activeLetters[wordText]++;
@@ -188,9 +199,13 @@ $(document).ready(function() {
 	            	playSound('noLetter');
 
         		    //removing the active letters from other words
-	            	activeLetters[wordText] = parseInt(activeLetters[wordText] - $(this).find('span.active').length);
+	            	activeLetters[wordText] = activeLetters[wordText] - this.querySelectorAll('span.active').length;
 
-	       			$(this).find('span').removeClass('active');
+	            	//removeClass(active);
+					var span = this.getElementsByTagName('span');
+					for (var i = 0; i < span.length; i++) {
+					    span[i].removeAttribute('class');
+					}
 	            }
 	        }else{
 	        	playSound('noLetter');
@@ -200,6 +215,8 @@ $(document).ready(function() {
 
 	$(".word").bind("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function(){
 	    gameOver();
+	    clearInterval(checkCollisions);
+	    clearInterval(interval);
 	});
 
 
@@ -211,14 +228,12 @@ $(document).ready(function() {
         var wordj = word[0];
         var wordText = wordj.getAttribute('data-word');
 		var missile = $('<span class="missile">|</span>');
-		console.log(wordj.getBoundingClientRect());
+
 		var axisX = wordj.offsetLeft + wordj.offsetWidth / 2;
 
 		//addCss3Property(missile, 'transition', 'all 4000ms ease');
 		missile[0].setAttribute('data-word', wordText);
 		missile[0].style.left = axisX + 'px';
-
-		console.log(missile);
 
 		game.append(missile);
 
@@ -228,7 +243,7 @@ $(document).ready(function() {
 		},10);
 	}
 
-	setInterval(function(){
+	var checkCollisions = setInterval(function(){
 		$('.missile').each(function(){
 			var word = $('#'+ this.getAttribute('data-word'));
 
@@ -290,15 +305,14 @@ $(document).ready(function() {
 
 
 	function isWordInProgress(wordText){
-	    var max = 0;
 	    var word = wordText;
 
-	    $.each(activeLetters, function(index, value){
-	        if(max < value){
-	            max = value;
-	            word = index;
-	        }
-	    });
+	    //getting the max value from the activeLetters object
+	    //http://stackoverflow.com/questions/11142884/fast-way-to-get-the-min-max-values-among-properties-of-object
+	    var arr = Object.keys(activeLetters).map(function (key) {
+		    return activeLetters[key];
+		});
+		var max = Math.max.apply(null, arr);
 
 	    return activeLetters[wordText] == max || (activeLetters[wordText] + 1 == max);
 	}
@@ -316,22 +330,38 @@ $(document).ready(function() {
      */
     function playSound(fileName){
         if(soundEnabled){
-            var audioElement = document.createElement('audio');
+            mysound[fileName].play();
+        }
+    }
+
+
+
+     /**
+     * Notification sound for every browser.
+     */
+    function createSound(fileName){
+    	if(soundEnabled){
+    		mysound.push(fileName);
+            var sound = document.createElement('audio');
 
             if (!isMpeg()) {
-                audioElement.setAttribute('src', "audio/" + fileName + ".ogg");
-                audioElement.setAttribute('type', 'audio/ogg');
+                sound.setAttribute('src', "audio/" + fileName + ".ogg");
+                sound.setAttribute('type', 'audio/ogg');
             }else{
-                audioElement.setAttribute('src', "audio/" + fileName + ".mp3");
-                audioElement.setAttribute('type', 'audio/mpeg');
+                sound.setAttribute('src', "audio/" + fileName + ".mp3");
+                sound.setAttribute('type', 'audio/mpeg');
             }
 
-            audioElement.setAttribute('autoplay', 'autoplay');
+            mysound[fileName] = sound;
 
-            audioElement.addEventListener("load", function() {
-                audioElement.play();
-            }, true);
+            $('body').append(mysound[fileName]);
         }
+    }
+
+    function createSounds(sounds){
+    	for(var i=0; i<sounds.length; i++){
+    	  	createSound(sounds[i]);
+    	}
     }
 
 
