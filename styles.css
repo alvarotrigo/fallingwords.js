@@ -54,7 +54,7 @@ body,html{
 }
 .word {
     position: absolute;
-    top: -20px;
+    top: -22px;
     color: #f2f2f2;
 }
 .word.active {
@@ -70,7 +70,7 @@ body,html{
     border-bottom: 1px solid #34495e;
 }
 #game {
-    font-size: 17px;
+    font-size: 19px;
     width: 900px;
     margin: 0 auto;
     padding:0;
@@ -95,14 +95,30 @@ body,html{
     font-size: 40px;
     font-weight: bold;
 }
+.city{
+    background: red;
+    position: absolute;
+    bottom: 0;
+    height: 10px;
+    width: 200px;
+}
+#city1{
+    left: 70px;
+}
+#city2{
+    left: 350px;
+}
+#city3{
+    left: 630px;
+}
 .missile{
     bottom: -15px;
     position: absolute;
     color: #fff;
     font-weight: bold;
     font-size: 16px;
-    transition: transform 4000ms ease-out;
-    -webkit-transition: -webkit-transform 4000ms ease-out;
+    transition: transform 3000ms ease-out;
+    -webkit-transition: -webkit-transform 3000ms ease-out;
 }
 .missile.active{
     transform: translateY(-620px);
