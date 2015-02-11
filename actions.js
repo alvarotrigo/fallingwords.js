@@ -129,7 +129,7 @@ $(document).ready(function() {
 	var speed = 18*1000;
 	var fallingLapse = 4000;
 	var soundEnabled = true;
-	var level = -2;
+	var level = 1;
 	var limitImpacts = 3;
 	var game = $('#game');
 	var levelj = $('#level')[0];
@@ -143,6 +143,15 @@ $(document).ready(function() {
 		'hit',
 		'missile'
 	];
+
+	function getQuery(selectors){
+		return document.querySelector(selectors);
+	}
+
+	function getQueryOnElement(element, selectors){
+		return element.querySelector(selectors);
+	}
+
 
 
 	var easing = 'ease-out';
@@ -289,9 +298,9 @@ $(document).ready(function() {
 	            	//removeClass(active);
 					var span = word.querySelectorAll('span.active');
 
-					if(span.length){
+					if(span){
 						//removing the active letters from other words
-	            		activeLetters[wordText] = activeLetters[wordText] - word.querySelectorAll('span.active').length;
+	            		activeLetters[wordText] = 0;
 
 	            		for (var i = 0; i < span.length; i++) {
 					  	  span[i].removeAttribute('class');
@@ -309,6 +318,7 @@ $(document).ready(function() {
 		if(!Object.keys(cities).length){
 			gameOver();
 		}
+		$(this).remove();
 	});
 
 
@@ -320,13 +330,14 @@ $(document).ready(function() {
 		var wordLeft = word.getAttribute('data-left');
 		var wordRight = word.getAttribute('data-right');
 
-				var wordText = word.getAttribute('data-word');
+		var wordText = word.getAttribute('data-word');
 
 		for (var key in cities) {
 			if( 
 				(wordLeft > cities[key].left && wordLeft < cities[key].right) 
 				|| (wordRight > cities[key].left && wordLeft < cities[key].left) ){
 				impactCity(key);
+
 			}
 		}
 	}
@@ -336,7 +347,6 @@ $(document).ready(function() {
 
 		if( impacts >= limitImpacts){
 			//console.log("LIMIT - city: " + key);
-
 			document.getElementById(key).style.background = 'black';
 			delete cities[key];
 		}
@@ -356,7 +366,6 @@ $(document).ready(function() {
 
 		var axisX = word.offsetLeft + word.offsetWidth / 2;
 
-		//addCss3Property(missile, 'transition', 'all 4000ms ease');
 		missile[0].setAttribute('data-word', wordText);
 		missile[0].style.left = axisX + 'px';
 
@@ -370,18 +379,20 @@ $(document).ready(function() {
 	}
 
 	var checkCollisions = setInterval(function(){
-		$('.missile').each(function(){
-			var word = $('#'+ this.getAttribute('data-word'));
+		var missiles = document.getElementsByClassName('missile');
+		for(var i = 0; i < missiles.length; i++){
+			var missile = missiles[i];
+
+			var word = document.getElementById(missile.getAttribute('data-word'));
 
 			//force reflow (for 3d transformations)
-            this.style.visibility = 'visible';
-
-			if( this.getBoundingClientRect().top <= word[0].getBoundingClientRect().top ){
-				$(this).remove();
-				word.remove();
+            missile.style.visibility = 'visible';
+			if( missile.getBoundingClientRect().top <= word.getBoundingClientRect().top ){
+				$(missile).remove();
+				$(word).remove();
             	playSound('destroyWord');
 			}
-		});
+		}
 	},13);
 
 	function setSpeed(word, level){
@@ -400,27 +411,6 @@ $(document).ready(function() {
 	            'transition': transition
 	    });
 	}
-
-	/**
-	* Adds transition animations for the given element
-	*/
-	function addAnimation(element, transition){
-		return element.css({
-			'-webkit-transform': transition,
- 			'transform': transition
-   		});
-	}
-
-    function addCss3Property(element, type, values) {
-        var css3 = {};
-
-        css3['-webkit-' + type] = values;
-        css3['-moz-' + type] = values;
-        css3['-ms-' + type] = values;
-        css3['-o-' + type] = values;
-
-        element.css(css3);
-    }
 
 	/**
 	 * Returnsn a random number between two values.
@@ -447,6 +437,7 @@ $(document).ready(function() {
 	function gameOver(){
 	    $('.word').remove();
 	    playSound('gameOver');
+	    document.getElementById('level').style.display = 'none';
 	    $('#game').append('<div class="gameOver"><div>Game Over</div></div>');
 
 	   	clearInterval(checkCollisions);
