@@ -7,123 +7,123 @@ $(document).ready(function() {
 
 		//testing levels
 		'-2': {
-	        speed: 80,
-	        fallingLapse: 200,
-	        words: 40
-	    },
-	    '-1': {
-	        speed: 80,
-	        fallingLapse: 300,
-	        words: 80
-	    },
-	    '0': {
-	        speed: 16,
-	        fallingLapse: 200,
-	        words: 80
-	    },
+			speed: 80,
+			fallingLapse: 200,
+			words: 40
+		},
+		'-1': {
+			speed: 80,
+			fallingLapse: 300,
+			words: 80
+		},
+		'0': {
+			speed: 16,
+			fallingLapse: 200,
+			words: 80
+		},
 
 
 		//game levels
-	    '1': {
-	        speed: 18,
-	        fallingLapse: 3000,
-	        words: 6
-	    },
-	    '2': {
-	        speed: 17,
-	        fallingLapse: 2800,
-	        words: 9
-	    },
-	    '3': {
-	        speed: 16,
-	        fallingLapse: 2600,
-	        words: 11
-	    },
-	    '4': {
-	        speed: 15,
-	        fallingLapse: 2400,
-	        words: 13
-	    },
-	    '5': {
-	        speed: 14,
-	        fallingLapse: 2100,
-	        words: 15
-	    },
-	    '6': {
-	        speed: 13,
-	        fallingLapse: 1800,
-	        words: 22
-	    },
-	    '7': {
-	        speed: 12,
-	        fallingLapse: 1500,
-	        words: 27
-	    },
-	    '8': {
-	        speed: 12,
-	        fallingLapse: 1200,
-	        words: 34
-	    },
-	    '9': {
-	        speed: 11,
-	        fallingLapse: 1000,
-	        words: 34
-	    },
-	    '10': {
-	        speed: 10,
-	        fallingLapse: 1000,
-	        words: 34
-	    },
-	    '11': {
-	        speed: 9,
-	        fallingLapse: 1000,
-	        words: 34
-	    },
-	    '12': {
-	        speed: 9,
-	        fallingLapse: 850,
-	        words: 34
-	    },
-	    '13': {
-	        speed: 8.5,
-	        fallingLapse: 850,
-	        words: 34
-	    },
-	   	'14': {
-	        speed: 8,
-	        fallingLapse: 800,
-	        words: 34
-	    },
-	   	'15': {
-	        speed: 7,
-	        fallingLapse: 750,
-	        words: 34
-	    },
-	   	'16': {
-	        speed: 7,
-	        fallingLapse:700,
-	        words: 34
-	    },
-	   	'17': {
-	        speed: 6,
-	        fallingLapse: 650,
-	        words: 34
-	    },
-	    '18': {
-	        speed: 6,
-	        fallingLapse: 600,
-	        words: 34
-	    },
-	    '19': {
-	        speed: 6,
-	        fallingLapse: 500,
-	        words: 34
-	    },
-	    '20': {
-	        speed: 6,
-	        fallingLapse: 400,
-	        words: 34
-	    }
+		'1': {
+			speed: 18,
+			fallingLapse: 3000,
+			words: 6
+		},
+		'2': {
+			speed: 17,
+			fallingLapse: 2800,
+			words: 9
+		},
+		'3': {
+			speed: 16,
+			fallingLapse: 2600,
+			words: 11
+		},
+		'4': {
+			speed: 15,
+			fallingLapse: 2400,
+			words: 13
+		},
+		'5': {
+			speed: 14,
+			fallingLapse: 2100,
+			words: 15
+		},
+		'6': {
+			speed: 13,
+			fallingLapse: 1800,
+			words: 22
+		},
+		'7': {
+			speed: 12,
+			fallingLapse: 1500,
+			words: 27
+		},
+		'8': {
+			speed: 12,
+			fallingLapse: 1200,
+			words: 34
+		},
+		'9': {
+			speed: 11,
+			fallingLapse: 1000,
+			words: 34
+		},
+		'10': {
+			speed: 10,
+			fallingLapse: 1000,
+			words: 34
+		},
+		'11': {
+			speed: 9,
+			fallingLapse: 1000,
+			words: 34
+		},
+		'12': {
+			speed: 9,
+			fallingLapse: 850,
+			words: 34
+		},
+		'13': {
+			speed: 8.5,
+			fallingLapse: 850,
+			words: 34
+		},
+		'14': {
+			speed: 8,
+			fallingLapse: 800,
+			words: 34
+		},
+		'15': {
+			speed: 7,
+			fallingLapse: 750,
+			words: 34
+		},
+		'16': {
+			speed: 7,
+			fallingLapse:700,
+			words: 34
+		},
+		'17': {
+			speed: 6,
+			fallingLapse: 650,
+			words: 34
+		},
+		'18': {
+			speed: 6,
+			fallingLapse: 600,
+			words: 34
+		},
+		'19': {
+			speed: 6,
+			fallingLapse: 500,
+			words: 34
+		},
+		'20': {
+			speed: 6,
+			fallingLapse: 400,
+			words: 34
+		}
 	};
 
 	var speed = 18*1000;
@@ -158,7 +158,7 @@ $(document).ready(function() {
 	var scenario = { width: game.width() };
 	var citiesWidth = $('#city1').width();
 
-	//getting the cities left and right coordinates 
+	//getting the cities left and right coordinates
 	var cities = {
 		city1: {
 			left: $('#city1').position().left,
@@ -183,16 +183,16 @@ $(document).ready(function() {
 
 	//creating the words
 	$.each(words, function (index, wordText) {
-	    var word = '';
-	    var characters = wordText.split('');
+		var word = '';
+		var characters = wordText.split('');
 
-	    //for each character
-	    for (var i = 0; i < characters.length; i++) {
-	        var letter = characters[i];
-	        word = word + '<span>' + letter + '</span>';
-	    }
+		//for each character
+		for (var i = 0; i < characters.length; i++) {
+			var letter = characters[i];
+			word = word + '<span>' + letter + '</span>';
+		}
 
-	    allwords = allwords + '<div class="word" data-word="'+wordText+'" id="'+wordText+'">' + word + '</div>';
+		allwords = allwords + '<div class="word" data-word="'+wordText+'" id="'+wordText+'">' + word + '</div>';
 	});
 
 	//adding words to the page
@@ -208,10 +208,10 @@ $(document).ready(function() {
 		if (right >= scenario.width){
 			left = left - $(this).width() - 30;
 		}
-	    $(this).css('left', left);
-	    $(this).attr('data-left', left).attr('data-right', right);
+		$(this).css('left', left);
+		$(this).attr('data-left', left).attr('data-right', right);
 
-	    activeLetters[$(this).data('word')] = 0;
+		activeLetters[$(this).data('word')] = 0;
 	});
 
 
@@ -221,96 +221,96 @@ $(document).ready(function() {
 	throwWords();
 
 	var spliceOne = function(arr, index) {
-             var len=arr.length;
-             if (!len) { return }
-             while (index<len) {
-                   arr[index] = arr[index+1]; index++ }
-             arr.length--;
-    };
+			 var len=arr.length;
+			 if (!len) { return }
+			 while (index<len) {
+				   arr[index] = arr[index+1]; index++ }
+			 arr.length--;
+	};
 
 	function throwWords(){
 		interval = setInterval(function () {
-		    //moving word down
-		    var random = getRandom(words.length);
-		    var text = words[random];
-		    var word = $('.word[data-word="'+text+'"]');
+			//moving word down
+			var random = getRandom(words.length);
+			var text = words[random];
+			var word = $('.word[data-word="'+text+'"]');
 
-		    //removing the word from our words array
-		    spliceOne(words, random);
-		    word[0].classList.add('active');
-	    	setSpeed(word, level);
+			//removing the word from our words array
+			spliceOne(words, random);
+			word[0].classList.add('active');
+			setSpeed(word, level);
 
-	    	if(cont == 1){
-	            levelj.style.display = 'none';
-	    	}
+			if(cont == 1){
+				levelj.style.display = 'none';
+			}
 
-		    cont++;
+			cont++;
 
-		    if(cont > levels[level].words){
-		        level++;
-		        cont=1;
-		        clearInterval(interval);
+			if(cont > levels[level].words){
+				level++;
+				cont=1;
+				clearInterval(interval);
 
-		        //lapse between levels
-		        setTimeout(function(){
-		        	playSound('newLevel');
+				//lapse between levels
+				setTimeout(function(){
+					playSound('newLevel');
 
-		        	//hidding current level
-		        	var span = document.getElementById("text").getElementsByTagName("span")[0];
-		        	span.style.display = 'none';
-		            span.innerHTML = level;
-		            levelj.innerHTML = "Level" + level;
-		            levelj.style.display = 'block';
-		            playSound('newLevel');
-		        	throwWords();
-		        }, 4000);
+					//hidding current level
+					var span = document.getElementById("text").getElementsByTagName("span")[0];
+					span.style.display = 'none';
+					span.innerHTML = level;
+					levelj.innerHTML = "Level" + level;
+					levelj.style.display = 'block';
+					playSound('newLevel');
+					throwWords();
+				}, 4000);
 
-		    }
+			}
 
 		}, levels[level].fallingLapse);
 	}
 
 	$(document).keypress(function (e) {
-	    var value = String.fromCharCode(e.which);
+		var value = String.fromCharCode(e.which);
 
-	    //for each non active letter of each active word
-	    var words = document.getElementsByClassName("word active");
+		//for each non active letter of each active word
+		var words = document.getElementsByClassName("word active");
 
 		for(var a = 0; a < words.length; a++){
-	    	var word = words[a];
-	    	var currentLetter = $(word).find('span:not(.active)').first();
-	        var wordText = word.getAttribute('data-word');
+			var word = words[a];
+			var currentLetter = $(word).find('span:not(.active)').first();
+			var wordText = word.getAttribute('data-word');
 
-	        if(currentLetter.is(':first-child') ||  currentLetter.prev().hasClass('active')){
-	            if (isWordInProgress(wordText) && currentLetter.text() == value) {
-	            	playSound('hit');
-	                currentLetter[0].classList.add('active');
-	                activeLetters[wordText]++;
+			if(currentLetter.is(':first-child') ||  currentLetter.prev().hasClass('active')){
+				if (isWordInProgress(wordText) && currentLetter.text() == value) {
+					playSound('hit');
+					currentLetter[0].classList.add('active');
+					activeLetters[wordText]++;
 
-	                //remove the word, well done!
-	                if(currentLetter.is(':last-child')){
-       	            	launchMissile(word);
-	                    delete activeLetters[wordText];
-	                }
-	            }else{
-	            	playSound('noLetter');
+					//remove the word, well done!
+					if(currentLetter.is(':last-child')){
+						launchMissile(word);
+						delete activeLetters[wordText];
+					}
+				}else{
+					playSound('noLetter');
 
-	            	//removeClass(active);
+					//removeClass(active);
 					var span = word.querySelectorAll('span.active');
 
 					if(span){
 						//removing the active letters from other words
-	            		activeLetters[wordText] = 0;
+						activeLetters[wordText] = 0;
 
-	            		for (var i = 0; i < span.length; i++) {
-					  	  span[i].removeAttribute('class');
+						for (var i = 0; i < span.length; i++) {
+						  span[i].removeAttribute('class');
 						}
 					}
-	            }
-	        }else{
-	        	playSound('noLetter');
-	        }
-	    }
+				}
+			}else{
+				playSound('noLetter');
+			}
+		}
 	});
 
 	$(".word").bind("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function(){
@@ -323,7 +323,7 @@ $(document).ready(function() {
 
 
 	$(".missile").bind("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function(){
-	    $(this).remove();
+		$(this).remove();
 	});
 
 	function checkImpact(word){
@@ -333,8 +333,8 @@ $(document).ready(function() {
 		var wordText = word.getAttribute('data-word');
 
 		for (var key in cities) {
-			if( 
-				(wordLeft > cities[key].left && wordLeft < cities[key].right) 
+			if(
+				(wordLeft > cities[key].left && wordLeft < cities[key].right)
 				|| (wordRight > cities[key].left && wordLeft < cities[key].left) ){
 				impactCity(key);
 
@@ -361,7 +361,7 @@ $(document).ready(function() {
 	}
 
 	function launchMissile(word){
-        var wordText = word.getAttribute('data-word');
+		var wordText = word.getAttribute('data-word');
 		var missile = $('<span class="missile">|</span>');
 
 		var axisX = word.offsetLeft + word.offsetWidth / 2;
@@ -386,11 +386,11 @@ $(document).ready(function() {
 			var word = document.getElementById(missile.getAttribute('data-word'));
 
 			//force reflow (for 3d transformations)
-            missile.style.visibility = 'visible';
+			missile.style.visibility = 'visible';
 			if( missile.getBoundingClientRect().top <= word.getBoundingClientRect().top ){
 				$(missile).remove();
 				$(word).remove();
-            	playSound('destroyWord');
+				playSound('destroyWord');
 			}
 		}
 	},13);
@@ -403,45 +403,45 @@ $(document).ready(function() {
 		var random = getRandom( ((22 * speed)/ 100) ) * plusOrMinus;
 		speed = speed + random;
 
-	    var transition = 'all ' + speed + 'ms ' + easing;
+		var transition = 'all ' + speed + 'ms ' + easing;
 
-	    //adding the animation
-	    word.css({
-	        '-webkit-transition': transition,
-	            'transition': transition
-	    });
+		//adding the animation
+		word.css({
+			'-webkit-transition': transition,
+				'transition': transition
+		});
 	}
 
 	/**
 	 * Returnsn a random number between two values.
 	 */
 	function getRandom(limit) {
-	    return Math.floor(Math.random() * limit);
+		return Math.floor(Math.random() * limit);
 	}
 
 
 	function isWordInProgress(wordText){
-	    var word = wordText;
+		var word = wordText;
 
-	    //getting the max value from the activeLetters object
-	    //http://stackoverflow.com/questions/11142884/fast-way-to-get-the-min-max-values-among-properties-of-object
-	    var arr = Object.keys(activeLetters).map(function (key) {
-		    return activeLetters[key];
+		//getting the max value from the activeLetters object
+		//http://stackoverflow.com/questions/11142884/fast-way-to-get-the-min-max-values-among-properties-of-object
+		var arr = Object.keys(activeLetters).map(function (key) {
+			return activeLetters[key];
 		});
 		var max = Math.max.apply(null, arr);
 
-	    return activeLetters[wordText] == max || (activeLetters[wordText] + 1 == max);
+		return activeLetters[wordText] == max || (activeLetters[wordText] + 1 == max);
 	}
 
 
 	function gameOver(){
-	    $('.word').remove();
-	    playSound('gameOver');
-	    document.getElementById('level').style.display = 'none';
-	    $('#game').append('<div class="gameOver"><div>Game Over</div></div>');
+		$('.word').remove();
+		playSound('gameOver');
+		document.getElementById('level').style.display = 'none';
+		$('#game').append('<div class="gameOver"><div>Game Over</div></div>');
 
-	   	clearInterval(checkCollisions);
-	    clearInterval(interval);
+		clearInterval(checkCollisions);
+		clearInterval(interval);
 		setTimeout(function(){
 			pauseSounds(sounds);
 		}, 3700);
@@ -449,57 +449,57 @@ $(document).ready(function() {
 
 
 	 /**
-     * Notification sound for every browser.
-     */
-    function playSound(fileName, options){
-        if(soundEnabled){
-        	var sound = mysound[fileName];
- 
-            sound.play();
-            sound.currentTime=0
-            if(options == 'loop'){
-        		sound.loop = true;
-        	}
-        }
-    }
+	 * Notification sound for every browser.
+	 */
+	function playSound(fileName, options){
+		if(soundEnabled){
+			var sound = mysound[fileName];
+
+			sound.play();
+			sound.currentTime=0
+			if(options == 'loop'){
+				sound.loop = true;
+			}
+		}
+	}
 
 
 
-     /**
-     * Notification sound for every browser.
-     */
-    function createSound(fileName){
-    	if(soundEnabled){
-    		mysound.push(fileName);
-            var sound;
+	 /**
+	 * Notification sound for every browser.
+	 */
+	function createSound(fileName){
+		if(soundEnabled){
+			mysound.push(fileName);
+			var sound;
 
-            if (!isMpeg()) {
-               	sound = new Audio('audio/' + fileName + ".ogg");
-            }else{
-            	sound = new Audio('audio/' + fileName + ".mp3");
-            }
+			if (!isMpeg()) {
+				sound = new Audio('audio/' + fileName + ".ogg");
+			}else{
+				sound = new Audio('audio/' + fileName + ".mp3");
+			}
 
-            mysound[fileName] = sound;
-        }
-    }
+			mysound[fileName] = sound;
+		}
+	}
 
-    function createSounds(sounds){
-    	for(var i=0; i<sounds.length; i++){
-    	  	createSound(sounds[i]);
-    	}
-    }
+	function createSounds(sounds){
+		for(var i=0; i<sounds.length; i++){
+			createSound(sounds[i]);
+		}
+	}
 
-    function pauseSounds(sounds){
-    	for(var i=0; i<sounds.length; i++){
-    	  	mysound[sounds[i]].pause();
-    	}
-    }
+	function pauseSounds(sounds){
+		for(var i=0; i<sounds.length; i++){
+			mysound[sounds[i]].pause();
+		}
+	}
 
-    //http://stackoverflow.com/questions/17791602/sound-notifications-in-opera
-    function isMpeg(){
-        var a = document.createElement('audio');
-        return !!(a.canPlayType && a.canPlayType('audio/mpeg;').replace(/no/, ''));
-    }
+	//http://stackoverflow.com/questions/17791602/sound-notifications-in-opera
+	function isMpeg(){
+		var a = document.createElement('audio');
+		return !!(a.canPlayType && a.canPlayType('audio/mpeg;').replace(/no/, ''));
+	}
 
 });
 
