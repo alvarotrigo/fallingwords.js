@@ -4,7 +4,7 @@ Only tested in Chrome so far.
 
 It is a work in progress...
 
-![preview](https://raw.github.com/alvarotrigo/fallingwords.js/master/intro.png)
+![preview](https://raw.github.com/alvarotrigo/fallingwords.js/master/intro.gif)
 
 
 - [Demo](http://alvarotrigo.com/fallingwords/)
