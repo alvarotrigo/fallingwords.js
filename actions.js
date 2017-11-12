@@ -6,6 +6,13 @@
  * Copyright (C) 2017 alvarotrigo.com - A project by Alvaro Trigo
  */
 (function($) {
+
+    //polify
+    var requestAnimFrame = window.requestAnimationFrame ||
+                            window.mozRequestAnimationFrame ||
+                            window.webkitRequestAnimationFrame ||
+                            window.msRequestAnimationFrame;
+
     window.fallingWords = function(){
         var self = this;
 
@@ -23,7 +30,9 @@
         var g_cont = 1;
         var g_score = 0;
         var g_numWordsDestroyed = 0;
-        var g_soundEnabled = false;
+        var g_soundEnabled = true;
+        var g_isGamePaused = false;
+        var g_isGameOver = false;
         var g_level = -1;
         var g_limitImpacts = 3;
         var g_easing = 'ease-out';
@@ -203,11 +212,13 @@
             setWordsInitPosition();
             setRightPositionCities();
             throwWordsInterval();
-            g_intervals.checkCollisions = setInterval(checkCollisions,13);
+            checkCollisions();
             setLevel(g_level);
 
             bindEvents();
         })();
+
+
 
         function bindEvents(){
             $(document).keypress(onKeyPress);
@@ -494,7 +505,7 @@
         * Checks the collisions between misiles and words
         */
         function checkCollisions(){
-            var missiles = document.getElementsByClassName('missile');
+            var missiles = document.querySelectorAll('.missile.active');
             for(var i = 0; i < missiles.length; i++){
                 var missile = missiles[i];
 
@@ -511,6 +522,10 @@
                     setScore( g_score + Math.abs(g_level) * 100 * g_numWordsDestroyed);
                 }
             }
+
+            if(!g_isGamePaused && !g_isGameOver){
+                requestAnimFrame(checkCollisions);
+            }
         }
 
         function exploteWord(word){
@@ -525,9 +540,7 @@
             };
             $explosion.addClass('active').css(params);
 
-            g_intervals.explosions = setTimeout(function(){
-                $explosion.removeClass('active');
-            }, 800);
+            g_intervals.explosions = setTimeout(removeActive.bind($explosion), 800);
         }
 
         function exploteCity(key){
@@ -544,9 +557,11 @@
 
             $city.addClass('active').css(params);
 
-            g_intervals.cityExplosions = setTimeout(function(){
-                $city.removeClass('active');
-            }, 1300);
+            g_intervals.cityExplosions = setTimeout(removeActive.bind($city), 1800);
+        }
+
+        function removeActive(){
+            this.removeClass('active');
         }
 
         function setSpeed(word, level){
@@ -593,6 +608,7 @@
         * Game over!
         */
         function gameOver(){
+            g_isGameOver = true;
             $(WORD_SEL).remove();
             playSound('gameOver');
             document.getElementById('level').style.display = 'none';
