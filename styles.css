@@ -56,6 +56,7 @@ body,html{
     position: absolute;
     top: -22px;
     color: #f2f2f2;
+    z-index: 999;
 }
 .word.active {
     transform: translateY(600px);
@@ -102,6 +103,28 @@ body,html{
     height: 10px;
     width: 200px;
 }
+.city:before{
+    content: '';
+    display: block;
+    background-image: url(imgs/city.png);
+    height: 109px;
+    width: 200px;
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    background-repeat: no-repeat;
+    z-index: 99;
+}
+.city.state2:before{
+    background-image: url(imgs/city-state2.png);
+
+}
+.city.state3:before{
+    background-image: url(imgs/city-state3.png);
+}
+.city.state4:before{
+    background-image: url(imgs/city-state4.png);
+}
 #city1{
     left: 70px;
 }
@@ -119,6 +142,9 @@ body,html{
     font-size: 16px;
     transition: transform 3000ms ease-out;
     -webkit-transition: -webkit-transform 3000ms ease-out;
+    background-image: url(imgs/rocket.gif);
+    height: 44px;
+    width: 16px;
 }
 .missile.active{
     transform: translateY(-620px);
@@ -142,7 +168,7 @@ body,html{
     text-align:center;
     font-family: arial, helvetica;
 }
-#text{
+#gameInfo{
     -webkit-box-sizing: border-box; /* Safari<=5 Android<=3 */
     -moz-box-sizing: border-box; /* <=28 */
     box-sizing: border-box;
@@ -152,4 +178,98 @@ body,html{
     padding: 10px;
     background: #F2F2F2;
     height: 38px;
+    position: relative;
+}
+.gameInfo-score{
+    position: absolute;
+    right: 0;
+    width:100px;
+}
+.explosion{
+    position: absolute;
+    bottom: -200px;
+    height: 82px;
+    width: 120px;
+    display: block;
+    background-image: url(imgs/explosion.gif);
+    z-index: 999;
+    display: none;
+}
+.explosion.active{
+    display: block;
+}
+.city-explosion{
+    position: absolute;
+    bottom: -500px;
+    height: 388px;
+    width: 300px;
+    display: block;
+    background-image: url(imgs/city-explosion.gif);
+    z-index: 999;
+    display: none;
+}
+.city-explosion.active{
+    display: block;
+}
+.fire{
+    display: block;
+    position: absolute;
+    width: 201px;
+    height: 70px;
+    background-image: url(imgs/fire.gif);
+    bottom: 7px;
+    left: 0;
+    display: none;
+}
+.city.state3 .fire,
+.city.state4 .fire{
+    display: block;
+}
+.cloud{
+    position: absolute;
+    -webkit-animation:linear infinite alternate;
+    animation-timing-function: ease-in-out;
+    -webkit-animation-timing-function: ease-in-out;
+}
+#cloud1{
+    top: 20px;
+    width: 200px;
+    height: 74px;
+    background-image: url(imgs/cloud-static.gif);
+    -webkit-animation-name: moveCloud1;
+    -webkit-animation-duration: 30s;
+
+}
+#cloud2{
+    top: 340px;
+    width: 220px;
+    height: 80px;
+    background-image: url(imgs/cloud-static2.gif);
+    -webkit-animation-name: moveCloud2;
+    -webkit-animation-duration: 10s;
+
+}
+#cloud3{
+    top: 200px;
+    width: 160px;
+    height: 56px;
+    background-image: url(imgs/cloud-static3.gif);
+    -webkit-animation-name: moveCloud3;
+    -webkit-animation-duration: 20s;
+
+}
+@-webkit-keyframes moveCloud1 {
+    0% { left: 5%;}
+    50%{ left : 20%;}
+    100%{ left: 5%;}
+}
+@-webkit-keyframes moveCloud2 {
+    0% { left: 30%;}
+    50%{ left : 25%;}
+    100%{ left: 30%;}
+}
+@-webkit-keyframes moveCloud3 {
+    0% { left: 70%;}
+    50%{ left : 55%;}
+    100%{ left: 70%;}
 }

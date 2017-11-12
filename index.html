@@ -11,18 +11,39 @@
 
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="styles.css" />
-	<script src="actions.js?v=2" type="text/javascript"></script>
-
 </head>
 <body>
 
-<div id="text">Level <span> 1</span></div>
+<div id="gameInfo">
+	<span>
+		Level
+		<span class="gameInfo-level"></span>
+	</span>
+
+	<span class="gameInfo-score">
+		Score
+		<span class="gameInfo-score-value"></span>
+	</span>
+</div>
 <div id="game">
-	<div id="level">Level 1</div>
-	<div class="city" id="city1"></div>
-	<div class="city" id="city2"></div>
-	<div class="city" id="city3"></div>
+	<div id="level">Level</div>
+	<div class="clouds">
+		<div class="cloud" id="cloud1"></div>
+		<div class="cloud" id="cloud2"></div>
+		<div class="cloud" id="cloud3"></div>
+	</div>
+	<div class="city" id="city1">
+		<div class="fire" id="fire1"></div>
+	</div>
+	<div class="city" id="city2">
+		<div class="fire" id="fire2"></div>
+	</div>
+	<div class="city" id="city3">
+		<div class="fire" id="fire3"></div>
+	</div>
+
 </div>
 
+<script src="actions.js?v=3" type="text/javascript"></script>
 </body>
 </html>
