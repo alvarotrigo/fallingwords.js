@@ -45,30 +45,13 @@ abbr,acronym { border: 0;
 }
 
 
- /* --------------------------------------- */
+/* Game
+ * --------------------------------------- */
 body,html{
     font-family: arial;
     color: #333;
     font-size: 16px;
     font-family: "Raleway", Helvetica, Arial, "Lucida Grande", sans-serif !important;
-}
-.word {
-    position: absolute;
-    top: -22px;
-    color: #f2f2f2;
-    z-index: 999;
-}
-.word.active {
-    transform: translateY(600px);
-    -ms-transform: translateY(600px);
-    -webkit-transform: -webkit-translateY(600px);
-}
-.word span{
-    margin: 0 1px 0 0;
-}
-.word span.active {
-    color: #34495e;
-    border-bottom: 1px solid #34495e;
 }
 #game {
     font-size: 19px;
@@ -96,6 +79,30 @@ body,html{
     font-size: 40px;
     font-weight: bold;
 }
+
+/* Words
+ * --------------------------------------- */
+.word {
+    position: absolute;
+    top: -22px;
+    color: #f2f2f2;
+    z-index: 999;
+}
+.word.active {
+    transform: translateY(600px);
+    -ms-transform: translateY(600px);
+    -webkit-transform: -webkit-translateY(600px);
+}
+.word span{
+    margin: 0 1px 0 0;
+}
+.word span.active {
+    color: #34495e;
+    border-bottom: 1px solid #34495e;
+}
+
+/* Cities
+ * --------------------------------------- */
 .city{
     background: red;
     position: absolute;
@@ -134,6 +141,9 @@ body,html{
 #city3{
     left: 630px;
 }
+
+/* Missiles
+ * --------------------------------------- */
 .missile{
     bottom: -15px;
     position: absolute;
@@ -151,23 +161,86 @@ body,html{
     -ms-transform: translateY(-620px);
     -webkit-transform: -webkit-translateY(-620px);
 }
-.gameOver {
-    font-size: 4em;
-    background: #C63D0F;
-    color: #f2f2f2;
-    font-weight:bold;
+
+/* Game Over
+ * --------------------------------------- */
+.gameOver{
+    display: table;
     height: 100%;
     width:100%;
     z-index: 777;
-    display:block;
+    background: #C63D0F;
+    position: relative;
+    color: #f2f2f2;
+}
+.gameOver-title{
+    color: #f2f2f2;
+    font-weight:bold;
+    font-size: 4em;
+}
+.gameOver.active{
     display:table;
 }
-.gameOver div {
+.gameOver-centered {
     display:table-cell;
     vertical-align:middle;
     text-align:center;
     font-family: arial, helvetica;
 }
+.gameOVer-info{
+    font-size: 1.7em;
+    margin: 40px 0;
+}
+.gameOver-score{
+    font-size: 2.2em;
+    font-weight: bold;
+}
+.gameOver-addToRanking{
+    font-size: 1.2em;
+}
+.gameOver-nameInput{
+    margin: 10px 0 0 0;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 15px;
+    display: inline-block;
+    height: 50px;
+    width: 50%;
+    font-family: -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 1.2em;
+    line-height: 1.2em;
+    background: #fff;
+    color: #aaa;
+    box-shadow: inset 0 1px 0 rgba(0,0,0,0.02);
+    text-rendering: optimizeLegibility;
+}
+.gameOver-addToRanking-button{
+    margin: 10px 0;
+    font-size: 1.2em;
+    border: 1px solid #17A8E3;
+    border-left: 0;
+    border-radius: 4px;
+    display: inline-block;
+    height: 50px;
+    width: 50%;
+    vertical-align: top;
+    background: #17A8E3;
+    padding: 11px 15px 12px;
+    color: #fff;
+    line-height: 100%;
+}
+
+/* Modal Scores
+ * --------------------------------------- */
+.modal-addScore{
+    width: 100%;
+    height: 100%;
+    background: white;
+}
+
+/* Game Info
+ * --------------------------------------- */
 #gameInfo{
     -webkit-box-sizing: border-box; /* Safari<=5 Android<=3 */
     -moz-box-sizing: border-box; /* <=28 */
@@ -185,6 +258,9 @@ body,html{
     right: 0;
     width:100px;
 }
+
+/* Explosions
+ * --------------------------------------- */
 .explosion{
     position: absolute;
     bottom: -200px;
@@ -211,6 +287,9 @@ body,html{
 .city-explosion.active{
     display: block;
 }
+
+/* Fire
+ * --------------------------------------- */
 .fire{
     display: block;
     position: absolute;
@@ -225,6 +304,9 @@ body,html{
 .city.state4 .fire{
     display: block;
 }
+
+/* Clouds
+ * --------------------------------------- */
 .cloud{
     position: absolute;
     -webkit-animation:linear infinite alternate;

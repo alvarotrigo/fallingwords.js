@@ -9,6 +9,7 @@
     var $g_game = $('#game');
     var $g_level = $('#level')[0];
     var $g_score = $('.gameInfo-score-value')[0];
+    var $g_gameOver = $('.gameOver');
 
     var g_soundEnabled = true;
     var g_mysound = [];
@@ -437,10 +438,14 @@
         };
 
         function bindEvents(){
-            $(document).keypress(onKeyPress);
-            $(document).on('click', '#pause', pauseGame);
-            $(document).on('click', '#resume', pauseGame);
+            $(document)
+                .keypress(onKeyPress)
+                .on('click', '#pause', pauseGame)
+                .on('click', '#resume', pauseGame)
+                .on('submit', '.gameOver-addToRanking', addScore);
+
             $(WORD_SEL).bind("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", wordTransitionEnd);
+
         }
 
         function pauseGame(e){
@@ -748,7 +753,16 @@
             $(WORD_SEL).remove();
             common.playSound('gameOver');
             document.getElementById('level').style.display = 'none';
-            $('#game').append('<div class="gameOver"><div>Game Over</div></div>');
+            $g_gameOver.addClass('active');
+            $g_gameOver.find('.gameOver-score').text(g_score);
+
+            //unbinding events
+            $(document)
+                .off('keypress')
+                .off('click', '#pause')
+                .off('click', '#resume')
+
+            $(WORD_SEL).off("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd");
 
             //clearing intervals
             for(var property in self.g_intervals){
@@ -758,13 +772,22 @@
             setTimeout(function(){
                 pauseSounds(g_sounds);
             }, 3700);
+
+            $('.modal-addScore').show();
         }
 
+        function addScore(e){
+            e.preventDefault();
 
+            $.post('https://alvarotrigo.com/fallingwords/ranking/', {name: $g_gameOver.find('#name').text() , score: g_score}, function(result){
+                console.log(result);
 
-         /**
-         * Notification sound for every browser.
-         */
+            })
+        }
+
+        /**
+        * Notification sound for every browser.
+        */
         function createSound(fileName){
             if(g_soundEnabled){
                 g_mysound.push(fileName);

@@ -9,7 +9,7 @@
 
 	<!--<link href='http://fonts.googleapis.com/css?family=Quicksand|Raleway:400' rel='stylesheet' type='text/css'>-->
 
-	<!--<script src="jquery.min.js"></script>-->
+	<script src="jquery.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="styles.css" />
 </head>
 <body>
@@ -40,6 +40,29 @@
 	</div>
 	<div class="city" id="city3">
 		<div class="fire" id="fire3"></div>
+	</div>
+	<div class="gameOver">
+		<div class="gameOver-centered">
+			<h3 class="gameOver-title">Game Over</h3>
+			<div class="gameOVer-info">
+				<p>Your score is</p>
+				<p class="gameOver-score">453,989</p>
+			</div>
+			<form class="gameOver-addToRanking" action="" method="POST">
+				<label for="name">Add your score to the ranking</label>
+				<p>
+					<input class="gameOver-nameInput" type="text" name="name" id="name" placeholder="Your name" />
+					<button class="gameOver-addToRanking-button" type="submit">
+                		<div class="gameOver-addToRanking-loading"></div>
+		                Add Score
+		            </button>
+				</p>
+			</form>
+
+		</div>
+	</div>
+	<div class="modal-addScore">
+		Add score
 	</div>
 </div>
 <button id="pause">Pause</button>
