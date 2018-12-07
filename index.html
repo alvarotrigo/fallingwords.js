@@ -9,8 +9,11 @@
 
 	<!--<link href='http://fonts.googleapis.com/css?family=Quicksand|Raleway:400' rel='stylesheet' type='text/css'>-->
 
+	<!-- To display the ranking -->
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+
 	<script src="jquery.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="styles.css" />
+	<link rel="stylesheet" type="text/css" href="styles.css?v=4" />
 </head>
 <body>
 
@@ -48,27 +51,50 @@
 				<p>Your score is</p>
 				<p class="gameOver-score">453,989</p>
 			</div>
-			<form class="gameOver-addToRanking" action="" method="POST">
+			<form class="addToRanking" action="" method="POST">
 				<label for="name">Add your score to the ranking</label>
 				<p>
 					<input class="gameOver-nameInput" type="text" name="name" id="name" placeholder="Your name" />
-					<button class="gameOver-addToRanking-button" type="submit">
-                		<div class="gameOver-addToRanking-loading"></div>
-		                Add Score
+					<button class="addToRanking-button" type="submit">
+                		<div class="addToRanking-loading"></div>
+		                <span class="addToRanking-addScore">Add Score</span>
+		                <span class="addToRanking-addingScore">Adding Score...</span>
 		            </button>
 				</p>
 			</form>
 
 		</div>
 	</div>
-	<div class="modal-addScore">
-		Add score
+	<div class="ranking">
+		<div class="ranking-centered">
+			<h3 class="ranking-title">Ranking</h3>
+			<div class="ranking-info">
+				<p>You are in position <span id="ranking-position"></span> of <span id="ranking-numUsers"></span> players</p>
+			</div>
+
+			<table id="ranking-table">
+        		<thead>
+		            <tr>
+		                <th>Rank</th>
+		                <th>Name</th>
+		                <th>Score</th>
+		                <th>Date</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+		        </tbody>
+		    </table>
+
+		</div>
 	</div>
 </div>
 <button id="pause">Pause</button>
 <button id="resume">Resume</button>
 
 
-<script src="actions.js?v=3" type="text/javascript"></script>
+<script src="actions.js?v=15" type="text/javascript"></script>
+
+<!-- To display the ranking -->
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 </body>
 </html>

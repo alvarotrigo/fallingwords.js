@@ -6,6 +6,8 @@
  * Copyright (C) 2017 alvarotrigo.com - A project by Alvaro Trigo
  */
 (function($) {
+    var ACTIVE = 'active';
+    var ACTIVE_SEL = '.' + ACTIVE;
     var $g_game = $('#game');
     var $g_level = $('#level')[0];
     var $g_score = $('.gameInfo-score-value')[0];
@@ -47,7 +49,7 @@
         },
 
         removeActive: function(){
-            $(this).removeClass('active');
+            $(this).removeClass(ACTIVE);
         }
     };
 
@@ -82,7 +84,7 @@
             common.playSound('missile');
 
             game.g_intervals.activeMisile = setTimeout(function(){
-                self.$missile[0].classList.add('active');
+                self.$missile[0].classList.add(ACTIVE);
             }, 10);
         })();
     }
@@ -114,7 +116,7 @@
         };
 
         self.fire = function(){
-            self.$word[0].classList.add('active');
+            self.$word[0].classList.add(ACTIVE);
             self.setSpeed(game.g_level);
             game.g_numFiredWords++;
         };
@@ -137,7 +139,7 @@
         };
 
         self.exploteWord = function(){
-            var $explosion = $('.explosion').not('.active').first();
+            var $explosion = $('.explosion').not(ACTIVE_SEL).first();
             var params = {
                 top: self.$word[0].getBoundingClientRect().top - game.g_explosionDimensions.height/2,
                 left: self.left + self.width / 2 - game.g_explosionDimensions.width/2,
@@ -145,7 +147,7 @@
                 //forcing the GIF to animate again, we need to add ?x=[RAMDOM STRING]
                 'background-image': 'url(' + g_explosionImage.replace(/\?.*$/,"")+"?x="+Math.random() + ')'
             };
-            $explosion.addClass('active').css(params);
+            $explosion.addClass(ACTIVE).css(params);
             game.g_intervals.explosions = setTimeout(common.removeActive.bind($explosion), 1100);
         };
 
@@ -193,7 +195,7 @@
         })();
 
         self.explote = function(){
-            var $cityExplosion = $('.city-explosion').not('.active').first();
+            var $cityExplosion = $('.city-explosion').not(ACTIVE_SEL).first();
             var params = {
                 bottom: -20,
                 left: self.left + self.width / 2 - g_cityExplosionDimensions.width/2,
@@ -202,7 +204,7 @@
                 'background-image': 'url(' + g_cityExplosionImage.replace(/\?.*$/,"")+"?x="+Math.random() + ')'
             };
 
-            $cityExplosion.addClass('active').css(params);
+            $cityExplosion.addClass(ACTIVE).css(params);
 
             setTimeout(common.removeActive.bind($cityExplosion), 1330);
 
@@ -259,7 +261,7 @@
 
         //words should fit the "id" format
         var g_wordsList = ['church','charge'];
-        var g_wordsList = ['abrigo','agujeta','calcetines','calzoncillo','camisa','camiseta','corbata','gorra','algodon','blusa','bolsa','cierre','cinturon','falda','guantes','medias','plantas','arbol','arbusto','cactus','abeja','alacran','alce','aguila','anguila','araña','ardilla','ardillita','armadillo','bisonte','lechuza','burro','caballo','cabra','caiman','camaleon','cardenal','cebra','cerdo','cocodrilo','colmillo','conejo','cisne','cucaracha','cuerno','cuervo','elefante','escarabajo','gato','gaviota','gorrion','grillo','gusano','halcon','hipopotamo','hormiga','babero','biberon','carrito','chupador','cuna','baño','bañera','champu','desague','ducha','espejo','cocina','abrelatas','caldero','colador','congelador','cuchara','destapador','escurridor','estufa','fregadero','gabinete','horno','horno','jarra','cuarto','aspiradora','escoba','lavadora','limpiadora','cuarto','cama','mesita','comoda','almohada','cobija','escalera','jarron','lampara','mesita','pared','pintura','repisa','sofa','sillon','herramientas','metrica','destornillador','formon','aeropuerto ','bolso','equipaje','restaurante','cocinero','menu','gasolinera','grandes','playa','aletas','arena','alga','castillo','bronceadora','gafas','apartamentos','ascensor','banca','basurero','edificio','oficinas','tornado','huracan','inundacion','lluvia','nieve','nublado','hace','sol','tenis','basquetbol','golf','futbol','futbol','voleibol','ping','badminton','beisbol','guitarra','tambores','trompeta','rojo','azul','amarillo','verde','violeta','morado','limon','lima','frijoles','tomate','remolacha','rabano','mantequilla','miel','nuez','mermelada','jalea','jugo','dulce','mayonesa','kechup','mostaza','piña','banana','durazno','albaricoque','pera','uva','pasa','harina','comida','familia','mama','papa','hermano','hermana','abuelos','abuela','abuelo','primos','sobrino','cuñado','cuñada','suegra','cajuela','ventana','rueda','llanta','claxon','volante','chofer','pajarita','pantalones','sombrero','sueter','traje','zapatos','pijama','pantaleta','pantimedia','sandalias','vestido','zapatos','hoja','margarita','tallo','tulipan','violeta','rosa','iguana','jirafa','lagartija','leon','libelula','llama','loro','mantis','mariposa','mono','mosca','mosquito','pajaro','paloma','perro','petirrojo','pez','oso','oveja','rana','rata','raton','raya','renacuajo','rinoceronte','salmon','saltamontes','tiburon','tigre','tortuga','trompa','trucha','vaca','venado','zorro','zancudo','cuna','oso','pañal','esponja','excusado','jabon','jabonera','lavamanos','tina','toalla','lavaplatos','licuadora','mesa','nevera','olla','plato','pimentero','refrigerador','salero','sarten','servilleta','tapa','tenedor','tostador','vaporera','vaso','recogedor','secadora','despertador','sabanas','armario','colgador','techo','muebles','mesa','cama','sillon','silla','escritorio','piano','basurero','llave','martillo','sierra','maleta','mesa','camarera','bolso','oferta','mar','onda','orilla','toalla','traje','sombrilla','oficina','autobus','calor','temperatura','termometro','nebuloso','neblina','ventoso','hace','humedad','nube','jockey','rugby','equitacion','natacion','equipo','piano','letra','anaranjado','rosa','marron','negro','blanco','aperitivo','aguacate','carnederes','desayuno','coliflor','apio','queso','pollo','postre','cena','huevo','pescado','hamburguesa','hotdog','papas','almuerzo','lechuga','leche','puerco','papas','ensalada','sandwich','sopa','azucar','pavo','agua','helado','suegro','novio','hijo','hija','nuera','yerno','amigo','novio','marido','esposa','madre','padre','sobrina','gasolina','cinturon'];
+        var g_wordsList = ['abrigo','agujeta','calcetines','calzoncillo','camisa','camiseta','corbata','gorra','algodon','blusa','bolsa','cierre','cinturon','falda','guantes','medias','plantas','arbol','arbusto','cactus','abeja','alacran','alce','aguila','anguila','araña','ardilla','ardillita','armadillo','bisonte','lechuza','burro','caballo','cabra','caiman','camaleon','cardenal','cebra','cerdo','cocodrilo','colmillo','conejo','cisne','cucaracha','cuerno','cuervo','elefante','escarabajo','gato','gaviota','gorrion','grillo','gusano','halcon','hipopotamo','hormiga','babero','biberon','carrito','chupador','cuna','baño','bañera','champu','desague','ducha','espejo','cocina','abrelatas','caldero','colador','congelador','cuchara','destapador','escurridor','estufa','fregadero','gabinete','horno','horno','jarra','cuarto','aspiradora','escoba','lavadora','limpiadora','cuarto','cama','mesita','comoda','almohada','cobija','escalera','jarron','lampara','mesita','pared','pintura','repisa','sofa','sillon','herramientas','metrica','destornillador','formon','aeropuerto','bolso','equipaje','restaurante','cocinero','menu','gasolinera','grandes','playa','aletas','arena','alga','castillo','bronceadora','gafas','apartamentos','ascensor','banca','basurero','edificio','oficinas','tornado','huracan','inundacion','lluvia','nieve','nublado','hace','sol','tenis','basquetbol','golf','futbol','futbol','voleibol','ping','badminton','beisbol','guitarra','tambores','trompeta','rojo','azul','amarillo','verde','violeta','morado','limon','lima','frijoles','tomate','remolacha','rabano','mantequilla','miel','nuez','mermelada','jalea','jugo','dulce','mayonesa','kechup','mostaza','piña','banana','durazno','albaricoque','pera','uva','pasa','harina','comida','familia','mama','papa','hermano','hermana','abuelos','abuela','abuelo','primos','sobrino','cuñado','cuñada','suegra','cajuela','ventana','rueda','llanta','claxon','volante','chofer','pajarita','pantalones','sombrero','sueter','traje','zapatos','pijama','pantaleta','pantimedia','sandalias','vestido','zapatos','hoja','margarita','tallo','tulipan','violeta','rosa','iguana','jirafa','lagartija','leon','libelula','llama','loro','mantis','mariposa','mono','mosca','mosquito','pajaro','paloma','perro','petirrojo','pez','oso','oveja','rana','rata','raton','raya','renacuajo','rinoceronte','salmon','saltamontes','tiburon','tigre','tortuga','trompa','trucha','vaca','venado','zorro','zancudo','cuna','oso','pañal','esponja','excusado','jabon','jabonera','lavamanos','tina','toalla','lavaplatos','licuadora','mesa','nevera','olla','plato','pimentero','refrigerador','salero','sarten','servilleta','tapa','tenedor','tostador','vaporera','vaso','recogedor','secadora','despertador','sabanas','armario','colgador','techo','muebles','mesa','cama','sillon','silla','escritorio','piano','basurero','llave','martillo','sierra','maleta','mesa','camarera','bolso','oferta','mar','onda','orilla','toalla','traje','sombrilla','oficina','autobus','calor','temperatura','termometro','nebuloso','neblina','ventoso','hace','humedad','nube','jockey','rugby','equitacion','natacion','equipo','piano','letra','anaranjado','rosa','marron','negro','blanco','aperitivo','aguacate','carnederes','desayuno','coliflor','apio','queso','pollo','postre','cena','huevo','pescado','hamburguesa','hotdog','papas','almuerzo','lechuga','leche','puerco','papas','ensalada','sandwich','sopa','azucar','pavo','agua','helado','suegro','novio','hijo','hija','nuera','yerno','amigo','novio','marido','esposa','madre','padre','sobrina','gasolina','cinturon'];
         //var g_wordsList = ['unbrave','unbruised','journeyer','ives','ursa','contented','ionian','maize','geordie','tanbark','gruelling','saadi','snowbound','glegness','eternise','augmentor','kinfolks','consist','point','pouter','precisian','sundew','tomium','sparrow','delative','polyxenus','unawake','undue','darius','pannage','chillum','amanda','lam','nicotine','handiwork','dumpily','beadily','sukkoth','bonelike','hylozoic','puss','gibbon','suharto','molasses','checkroom','agora','mobocracy','cosiest','slatier','anarch','redundant','corpora','spinozism','kloesse','xanthous','ozocerite','maremma','sleepers','swit','fare','lunated','meleager','prevision','tumaco','unfetter','emissary','botvinnik','rev','giorgione','exciting','famished','kenova','unhuddle','kubango','prelect','hard','andoroba','nauch','publicity','apodemal','argyle','bismarck','hottest','expansile','bigger','poromeric','heron','jungfrau','oidia','pandavas','razeeing','zymologic','roseless','delicia','agacles','unjuicily','coalesce','revoting','thimphu','anatomy','feminie','pyxidia','parousia','shabbier','tempura','vagal','diatribe','deftly','ava','ginkgo','unexhumed','cocoyam','aydelotte','connexion','bagh','alost','machinist','sloane','china','attingent','pustule','yirr','valdosta','interlace','popish','unknelled','redenied','phallus','epaulet','unechoic','angora','church','teledu','quickly','reground','runty','cheshire','scurrile','sheeney','fathomer','sarasvati','gypsyism','ignition','spewer','tankless','unusurped','vale','rejection','anxiety','lacuna','madonna','wider','profferer','sporty','markevich','burger','ephippia','jail','davey','molise','aft','forth','caldaria','outjet','zionist','halachot','recourse','margareta','danseuse','kamet','redefeat','ivor','sitzkrieg','judaea','dupr','backward','gari','discomfit','calgary','complice','colonised','mass','pretender','unionize','manoeuvre','holloaed','paccha','nereid','cardhouse','unfacile','bouillon','accessory','american','unequal','quidnunc','observe','irishised','hoylake','tarried','decried','merl','urolith','trustable','similarly','melpomene','fraught','mango','dana','palencia','margin','zibeline','elucidate','nouma','cete','larum','unpeopled','kanji','unstrewn','aslant','bing','shovel','firework','rampager','antipodes','phrensied','eulogy','idiotise','adamant','preguess','showmanly','tendril','felicidad','liou','senza','ambulated','siloxane','cunt','scientist','illumed','unsmooth','agonist','pyalla','submiss','celluloid','flighty','apriorism','minuend','choicer','preexact','fushun','contusion','acol','foreskin','hostaging','lynchet','atresia','exalter','adieus','unflowing','cousinry','quittable','atomist','rooflike','gavotte','faunally','steampipe','canoodle','unsponged','boltlike','penance','podiums','commit','finalize','landsmaal','natant','tropical','enigma','ticknor','nastiness','varicose','kopje','umbonal','vignette','warded','rainbird','mewar','bullet','narceine','leangle','curtesy','devastate','furrily','strobic','theomancy','mfd','embolus','perutz','eurhythmy','sayers','shapka','goadlike','timbale','ligating','cutwater','salmon','fretwork','mobutu','descartes','craftiest','idyll','capsid','handsewn','abbotcy','absonant','deface','scroop','rort','pup','incarnate','kirigami','frog','unicycle','burgher','allobaric','bizerta','disjaskit','void','dinkiest','gawkier','duello','boresome','snowcreep','autoharp','begabled','foxberry','lumberer','purer','muticous','auber','topiaries','hereupon','elegantly','ranee','haywire','unbay','sorceries','baker','caucasia','cooing','underfed','biography','nonethnic','ozonizer','bowerlike','cullis','pip','exeter','cloakroom','shembe','mycelium','falderol','saltier','smetana','attrahent','diabolize','vampiric','pretimely','fetial','asterion','topmost','phyton','aseity','autobahn','impinger','draftiest','chapatti','orator','dunedin','beatitude','danbury','greg','celebrate','scrip','pithead','iapigia','carbuncle','manila','holler','marital','bisection','shapable','terrier','gullable','syndromic','overwrite','niceness','athetoid','duka','degummed','floc','wady','dogcart','vatted','deckhead','sapwood','addition','plication','sucrose','stanton','lollardy','befall','teughness','alcalde','galumph','panoptic','oriental','wellesley','mutualism','ductwork','everybody','covin','cosiness','pelican','meagerly','wittily','outshaped','baghlan','kelson','vivace','wagnerite','caboodle','wifelike','foretaste','enuring','aspen','cavatina','durban','dulciana','dissenter','outreckon','richfield','retrorse','kerkyra','diosgenin','engage','pulsating','cheddar','melodist','hide','thiazole','bassano','loppy','dabble','nerve','oncost','kay','usa','hechshers','afire','enfetter','useable','poleax','decameron','subhall','ophore','gentisate','cultigen','ampersand','genetic','unwhite','prologise','brynza','unnipped','jag','keifer','schedular','creosotic','homocercy','trogon','chuprassi','pizzicato','lilyan','enc','heeze','verier','archfiend','nares','sorgho','tuberoid','pickled','peanuts','casemate','frond','ghazi','sloshiest','viand','volta','thespiae','greenberg','brand'];
         var g_words = [];
         self.g_firedWords = [];
@@ -269,7 +271,8 @@
         var g_numWordsDestroyed = 0;
         var g_isGamePaused = false;
         var g_isGameOver = false;
-        var g_level = 14;
+        var g_level = 7;
+        var g_username;
         self.g_level = g_level;
 
         self.g_explosionDimensions = {};
@@ -442,7 +445,7 @@
                 .keypress(onKeyPress)
                 .on('click', '#pause', pauseGame)
                 .on('click', '#resume', pauseGame)
-                .on('submit', '.gameOver-addToRanking', addScore);
+                .on('submit', '.addToRanking', addScore);
 
             $(WORD_SEL).bind("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", wordTransitionEnd);
 
@@ -601,7 +604,7 @@
                     clearTimeout(self.g_intervals.playHitSound);
                     self.g_intervals.playHitSound = setTimeout(playHitSound, 10);
 
-                    word.$word[0].getElementsByTagName('span')[word.activeLetters].classList.add('active');
+                    word.$word[0].getElementsByTagName('span')[word.activeLetters].classList.add(ACTIVE);
                     word.activeLetters++;
 
                     //remove the word, well done!
@@ -615,7 +618,7 @@
                 else{
                     //has any active letter?
                     if(word.activeLetters){
-                        var span = word.$word[0].querySelectorAll('span.active');
+                        var span = word.$word[0].querySelectorAll('span'+ACTIVE_SEL);
 
                         //removing the active letters from other words
                         word.activeLetters = 0;
@@ -753,7 +756,7 @@
             $(WORD_SEL).remove();
             common.playSound('gameOver');
             document.getElementById('level').style.display = 'none';
-            $g_gameOver.addClass('active');
+            $g_gameOver.addClass(ACTIVE);
             $g_gameOver.find('.gameOver-score').text(g_score);
 
             //unbinding events
@@ -779,11 +782,68 @@
         function addScore(e){
             e.preventDefault();
 
-            $.post('https://alvarotrigo.com/fallingwords/ranking/', {name: $g_gameOver.find('#name').text() , score: g_score}, function(result){
-                console.log(result);
+            $('.addToRanking-button').addClass(ACTIVE);
+            g_username = $g_gameOver.find('#name').val();
 
-            })
+            //$.post('https://alvarotrigo.com/pruebas/game-ranking/?action=addUser', {name: g_username , score: g_score}, function(result){
+                //var data = JSON.parse(result);
+                var data = {"success":true,"users":[{"id":"1","name":"Alvaro","score":"2000","created":"2017-11-25 19:25:10"},{"id":"2","name":"Alvaro","score":"2000","created":"2017-11-25 19:25:52"},{"id":"3","name":"Alvaro","score":"2000","created":"2017-11-25 19:25:55"},{"id":"16","name":"aafdasfafa","score":"0","created":"2017-11-26 22:13:14"},{"id":"17","name":"aaaaa","score":"0","created":"2017-11-26 22:14:33"},{"id":"18","name":"fdasfsaaa","score":"0","created":"2017-11-26 22:15:07"},{"id":"19","name":"dfasfasaaaa","score":"0","created":"2017-11-26 22:16:04"},{"id":"20","name":"fdasfaf","score":"0","created":"2017-11-26 22:17:25"},{"id":"21","name":"fdsafadfaaa","score":"0","created":"2017-11-26 22:18:42"},{"id":"22","name":"fadsfa","score":"0","created":"2017-11-26 22:19:55"},{"id":"23","name":"fasdfaaa","score":"0","created":"2017-11-26 22:20:54"},{"id":"24","name":"fdasaaaafdf","score":"0","created":"2017-11-26 22:22:52"},{"id":"15","name":"aaaaa","score":"0","created":"2017-11-26 22:11:53"},{"id":"14","name":"fasdfa","score":"0","created":"2017-11-26 22:08:34"},{"id":"13","name":"fadsfaf","score":"0","created":"2017-11-26 22:07:29"},{"id":"4","name":"testfadsf","score":"0","created":"2017-11-26 19:51:57"},{"id":"5","name":"fdasfsafa","score":"0","created":"2017-11-26 20:01:47"},{"id":"8","name":"fadsfasfa","score":"0","created":"2017-11-26 22:01:21"},{"id":"9","name":"fdsafaf","score":"0","created":"2017-11-26 22:03:21"},{"id":"10","name":"fadsfsafa","score":"0","created":"2017-11-26 22:04:11"},{"id":"11","name":"fadsfsafa","score":"0","created":"2017-11-26 22:04:59"},{"id":"12","name":"fadsfsafa","score":"0","created":"2017-11-26 22:05:28"},{"id":"25","name":"afdawwww","score":"0","created":"2017-11-26 22:23:33"},{"id":"7","name":"fsdafsa","score":"-13200","created":"2017-11-26 22:01:13"},{"id":"6","name":"fsdafsa","score":"-13200","created":"2017-11-26 21:59:09"}]};
+                data.users.map(function(user, index){
+                    user.rank = index + 1;
+                });
+
+                $('.addToRanking-button').removeClass(ACTIVE);
+
+                if(!data.success){
+                    alert("Error adding the score! Contact Alvaro! @imac2")
+                }
+
+                //all ok?
+                else{
+                    showRanking(data.users);
+                }
+            //});
         }
+
+        function numberWithCommas(x){
+            if(!x){ return 0;}
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function showRanking(users){
+            $('.gameOver').fadeOut(1200, function(){
+                $('.ranking-centered').addClass('active');
+            });
+
+            var currentUser = users.filter(function(user){
+                return user.name == g_username;
+            });
+
+            $('#ranking-position').text(numberWithCommas(currentUser.rank));
+            $('#ranking-numUsers').text(numberWithCommas(users.length));
+
+            $('#ranking-table').DataTable({
+                //removes default sorting
+                order: [2, 'desc'],
+
+                data: users,
+                pageLength: 10,
+                columns: [
+                    {
+                        data: 'rank'
+                    },
+                    {
+                        data: 'name'
+                    },
+                    { data: 'score' },
+
+                    {
+                        data: 'created'
+                    }
+                ],
+            });
+        }
+        self.showRanking = showRanking;
 
         /**
         * Notification sound for every browser.
