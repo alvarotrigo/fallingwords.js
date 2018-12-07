@@ -164,8 +164,9 @@ body,html{
 
 /* Game Over
  * --------------------------------------- */
-.gameOver{
-    display: table;
+.gameOver,
+.ranking{
+    display: none;
     height: 100%;
     width:100%;
     z-index: 777;
@@ -173,7 +174,17 @@ body,html{
     position: relative;
     color: #f2f2f2;
 }
-.gameOver-title{
+.ranking{
+    z-index: 666;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 1;
+}
+.gameOver-title,
+.ranking-title{
     color: #f2f2f2;
     font-weight:bold;
     font-size: 4em;
@@ -181,17 +192,31 @@ body,html{
 .gameOver.active{
     display:table;
 }
-.gameOver-centered {
+.gameOver-centered{
     display:table-cell;
     vertical-align:middle;
     text-align:center;
     font-family: arial, helvetica;
 }
+.ranking-centered{
+    text-align:center;
+    opacity: 0;
+    transition: all 1200ms ease-in-out;
+    -webit-transition: all 1200ms ease-in-out;
+}
+.ranking-centered.active{
+    opacity: 1;
+}
 .gameOVer-info{
     font-size: 1.7em;
     margin: 40px 0;
 }
-.gameOver-score{
+.ranking-info{
+    font-size: 1.7em;
+    margin: 14px 0 40px 0;
+}
+.gameOver-score,
+.ranking-position{
     font-size: 2.2em;
     font-weight: bold;
 }
@@ -215,7 +240,7 @@ body,html{
     box-shadow: inset 0 1px 0 rgba(0,0,0,0.02);
     text-rendering: optimizeLegibility;
 }
-.gameOver-addToRanking-button{
+.addToRanking-button{
     margin: 10px 0;
     font-size: 1.2em;
     border: 1px solid #17A8E3;
@@ -230,10 +255,68 @@ body,html{
     color: #fff;
     line-height: 100%;
 }
+.addToRanking-loading{
+    display: none;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    border: 0.2rem solid rgba(0,0,0,0.2);
+    border-top-color: #000;
+    -webkit-animation: spin 1s infinite linear;
+    animation: spin 1s infinite linear;
+    margin: 0px 10px 0 0;
+    vertical-align: middle;
+}
+.addToRanking-addingScore,
+.addToRanking-loading{
+    display: none;
+}
+.addToRanking-button.active .addToRanking-loading,
+.addToRanking-button.active .addToRanking-addingScore{
+    display: inline-block;
+}
+.addToRanking-button.active .addToRanking-addScore{
+    display: none;
+}
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
 
+/* Ranking table
+ * --------------------------------------- */
+#rankingTable{
+    width: 100% !important;
+    padding: 0 35px;
+}
+table.dataTable tbody tr {
+    background-color: #c63d0f;
+    text-align: left;
+}
+table.dataTable tbody th, table.dataTable tbody td {
+    padding: 4px 10px;
+    font-size: 16px;
+}
 /* Modal Scores
  * --------------------------------------- */
 .modal-addScore{
+    display: none;
     width: 100%;
     height: 100%;
     background: white;
