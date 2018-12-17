@@ -43,7 +43,32 @@ q:before,q:after {
 }
 abbr,acronym { border: 0;
 }
+*{
+    -webkit-box-sizing: border-box; /* Safari<=5 Android<=3 */
+    -moz-box-sizing: border-box; /* <=28 */
+    box-sizing: border-box;
+}
 
+
+
+/* Buttons
+ * --------------------------------------- */
+.button{
+    margin: 10px 0;
+    font-size: 1.2em;
+    border: 1px solid #17A8E3;
+    border-left: 0;
+    border-radius: 4px;
+    display: inline-block;
+    height: 50px;
+    width: 50%;
+    vertical-align: top;
+    background: #17A8E3;
+    padding: 11px 15px 12px;
+    color: #fff;
+    line-height: 100%;
+    cursor: pointer;
+}
 
 /* Game
  * --------------------------------------- */
@@ -58,13 +83,14 @@ body,html{
     width: 900px;
     margin: 0 auto;
     padding:0;
-    height: 600px;
+    height: 650px;
     border-bottom: 4px solid #d8d8d8;
     display:block;
     position: relative;
     overflow: hidden;
     background-image: url(imgs/bg.png);
     background-repeat: repeat;
+    overflow: hidden;
 }
 #level{
     display: block;
@@ -84,21 +110,27 @@ body,html{
  * --------------------------------------- */
 .word {
     position: absolute;
-    top: -22px;
+    top: -24px;
     color: #f2f2f2;
     z-index: 999;
 }
 .word.active {
-    transform: translateY(600px);
-    -ms-transform: translateY(600px);
-    -webkit-transform: -webkit-translateY(600px);
+    transform: translateY(651px);
+    -ms-transform: translateY(651px);
+    -webkit-transform: -webkit-translateY(651px);
 }
 .word span{
     margin: 0 1px 0 0;
+    border-width: 0px;
+    will-change: color, border-bottom;
+    border-color: #34495e;
+    border-style: solid;
+    transform: translateZ(0);
 }
 .word span.active {
     color: #34495e;
-    border-bottom: 1px solid #34495e;
+    border-bottom: 1px;
+
 }
 
 /* Cities
@@ -109,6 +141,11 @@ body,html{
     bottom: 0;
     height: 10px;
     width: 200px;
+    transform: translate3d(0, 139px, 0);
+    transition: transform 300ms ease-in;
+}
+#game.active .city{
+    transform: translate3d(0, 0, 0);
 }
 .city:before{
     content: '';
@@ -137,30 +174,72 @@ body,html{
 }
 #city2{
     left: 350px;
+     transition-delay: 100ms;
 }
 #city3{
     left: 630px;
+    transition-delay: 200ms;
 }
 
 /* Missiles
  * --------------------------------------- */
 .missile{
-    bottom: -15px;
+    bottom: -209px;
     position: absolute;
     color: #fff;
     font-weight: bold;
     font-size: 16px;
-    transition: transform 3000ms ease-out;
-    -webkit-transition: -webkit-transform 3000ms ease-out;
-    background-image: url(imgs/rocket.gif);
-    height: 44px;
-    width: 16px;
+    transition: transform 1000ms ease-out;
+    -webkit-transition: -webkit-transform 1000ms ease-out;
+    background-image: url(imgs/missile.png);
+    height: 200px;
+    width: 26px;
+    will-change: transform;
+    transform: translateZ(0);
+
 }
 .missile.active{
     transform: translateY(-620px);
     -ms-transform: translateY(-620px);
     -webkit-transform: -webkit-translateY(-620px);
 }
+
+/* Start scree
+ * --------------------------------------- */
+.startScreen{
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9999999999;
+    display: table;
+    width: 100%;
+    height: 100%;
+    background-image: url(imgs/bg.png);
+}
+.startScreen-playButton{
+    background: #efff00;
+    color: black;
+    position: absolute;
+    bottom: 157px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+}
+.startScreen-playButton:hover{
+    background: #ffeb00;
+}
+.startScreen-title{
+    color: #fff;
+}
+.startScreen-centered{
+    vertical-align: middle;
+    display: table-cell;
+    text-align: center;
+    background-image: url(./imgs/hero.png);
+    background-size: cover;
+    background-repeat: repeat;
+}
+
 
 /* Game Over
  * --------------------------------------- */
@@ -192,7 +271,7 @@ body,html{
 .gameOver.active{
     display:table;
 }
-.gameOver-centered{
+.gameOver-centered {
     display:table-cell;
     vertical-align:middle;
     text-align:center;
@@ -215,6 +294,7 @@ body,html{
     font-size: 1.7em;
     margin: 14px 0 40px 0;
 }
+
 .gameOver-score,
 .ranking-position{
     font-size: 2.2em;
@@ -223,9 +303,8 @@ body,html{
 .gameOver-addToRanking{
     font-size: 1.2em;
 }
-.gameOver-nameInput{
+.gameOver-textInput{
     margin: 10px 0 0 0;
-    box-sizing: border-box;
     border: 1px solid #ccc;
     border-radius: 4px;
     padding: 15px;
@@ -240,22 +319,7 @@ body,html{
     box-shadow: inset 0 1px 0 rgba(0,0,0,0.02);
     text-rendering: optimizeLegibility;
 }
-.addToRanking-button{
-    margin: 10px 0;
-    font-size: 1.2em;
-    border: 1px solid #17A8E3;
-    border-left: 0;
-    border-radius: 4px;
-    display: inline-block;
-    height: 50px;
-    width: 50%;
-    vertical-align: top;
-    background: #17A8E3;
-    padding: 11px 15px 12px;
-    color: #fff;
-    line-height: 100%;
-}
-.addToRanking-loading{
+.gameOver-addToRanking-loading{
     display: none;
     border-radius: 50%;
     width: 18px;
@@ -267,15 +331,15 @@ body,html{
     margin: 0px 10px 0 0;
     vertical-align: middle;
 }
-.addToRanking-addingScore,
-.addToRanking-loading{
+.gameOver-addToRanking-addingScore,
+.gameOver-addToRanking-loading{
     display: none;
 }
-.addToRanking-button.active .addToRanking-loading,
-.addToRanking-button.active .addToRanking-addingScore{
+.gameOver-addToRanking-button.active .gameOver-addToRanking-loading,
+.gameOver-addToRanking-button.active .gameOver-addToRanking-addingScore{
     display: inline-block;
 }
-.addToRanking-button.active .addToRanking-addScore{
+.gameOver-addToRanking-button.active .gameOver-addToRanking-addScore{
     display: none;
 }
 @-webkit-keyframes spin {
@@ -298,12 +362,34 @@ body,html{
             transform: rotate(360deg);
   }
 }
+.gameOver-notice{
+    font-size: 12px;
+    background: rgba(0,0,0,0.6);
+    padding: 5px 15px;
+    color: #fff;
+    font-size: 13px;
+    display: block;
+    width: 450px;
+    margin: 0 auto;
+}
 
 /* Ranking table
  * --------------------------------------- */
-#rankingTable{
+#ranking-table{
     width: 100% !important;
     padding: 0 35px;
+}
+#ranking-table_filter{
+    float: none;
+    margin: 0 auto;
+    text-align: center;
+    margin: 20px 0;
+}
+#ranking-table_filter label{
+    background: rgba(0, 0, 0, 0.22);
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: rgba(255,255,255,0.7);
 }
 table.dataTable tbody tr {
     background-color: #c63d0f;
@@ -313,33 +399,69 @@ table.dataTable tbody th, table.dataTable tbody td {
     padding: 4px 10px;
     font-size: 16px;
 }
+.dataTables_wrapper .dataTables_paginate .paginate_button,
+.dataTables_wrapper .dataTables_info,
+.paginate_button{
+    color: #fff !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover{
+    color: rgba(255,255,255,0.3) !important;
+}
+table.dataTable thead th, 
+table.dataTable thead td{
+    border-bottom: 1px solid #fff
+}
+table.dataTable.no-footer{
+    border-bottom: none;
+}
+span .paginate_button {
+    display: none !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background: none;
+    border:none;
+    text-decoration: underline;
+}
+
 /* Modal Scores
  * --------------------------------------- */
 .modal-addScore{
-    display: none;
     width: 100%;
     height: 100%;
     background: white;
+    display: none;
 }
 
 /* Game Info
  * --------------------------------------- */
-#gameInfo{
-    -webkit-box-sizing: border-box; /* Safari<=5 Android<=3 */
-    -moz-box-sizing: border-box; /* <=28 */
-    box-sizing: border-box;
+.game-info{
+    position: absolute;
+    transform: translate3d(0, -50px, 0);
+    left: 0;
+    width: 100%;
     display: block;
-    width: 900px;
     margin: 0 auto;
-    padding: 10px;
+    padding: 0 10px;
     background: #F2F2F2;
-    height: 38px;
-    position: relative;
+    background: url(./imgs/game-header.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: #63472f;
+    font-weight: bold;
+    font-size: 24px;
+    height: 50px;
+    line-height: 50px;
+    transition: transform 500ms ease-out;
+    z-index: 9999;
 }
-.gameInfo-score{
+#game.active .game-info{
+    transform: translate3d(0, 0, 0);
+}
+.game-info-score{
     position: absolute;
     right: 0;
-    width:100px;
+    width:170px;
 }
 
 /* Explosions
@@ -365,10 +487,11 @@ table.dataTable tbody th, table.dataTable tbody td {
     display: block;
     background-image: url(imgs/city-explosion.gif);
     z-index: 999;
-    display: none;
+    display: block;
+    will-change: bottom, background-image;
 }
 .city-explosion.active{
-    display: block;
+    bottom: -20px;
 }
 
 /* Fire
@@ -395,48 +518,52 @@ table.dataTable tbody th, table.dataTable tbody td {
     -webkit-animation:linear infinite alternate;
     animation-timing-function: ease-in-out;
     -webkit-animation-timing-function: ease-in-out;
+    will-change: transform;
+    transform: translateZ(0);
 }
 #cloud1{
-    top: 20px;
+    top: 70px;
     width: 200px;
     height: 74px;
+    left: 5%;
     background-image: url(imgs/cloud-static.gif);
     -webkit-animation-name: moveCloud1;
     -webkit-animation-duration: 30s;
-
 }
 #cloud2{
-    top: 340px;
+    top: 390px;
     width: 220px;
     height: 80px;
+    left: 30%;
     background-image: url(imgs/cloud-static2.gif);
     -webkit-animation-name: moveCloud2;
     -webkit-animation-duration: 10s;
 
 }
 #cloud3{
-    top: 200px;
+    top: 250px;
     width: 160px;
     height: 56px;
+    left: 50%;
     background-image: url(imgs/cloud-static3.gif);
     -webkit-animation-name: moveCloud3;
     -webkit-animation-duration: 20s;
 
 }
 @-webkit-keyframes moveCloud1 {
-    0% { left: 5%;}
-    50%{ left : 20%;}
-    100%{ left: 5%;}
+    0% { transform: translate3d(5%, 0, 0);}
+    50%{ transform: translate3d(30%, 10px, 0);}
+    100%{ transform: translate3d(5%, 0, 0);}
 }
 @-webkit-keyframes moveCloud2 {
-    0% { left: 30%;}
-    50%{ left : 25%;}
-    100%{ left: 30%;}
+    0% { transform: translate3d(30%, 0, 0);}
+    50%{ transform: translate3d(10%, -20px, 0);}
+    100%{transform: translate3d(30%, 0, 0);}
 }
 @-webkit-keyframes moveCloud3 {
-    0% { left: 70%;}
-    50%{ left : 55%;}
-    100%{ left: 70%;}
+    0% { transform: translate3d(70%, 0, 0);}
+    50%{ transform: translate3d(20%, 20px, 0);}
+    100%{ transform: translate3d(80%, 0, 0);}
 }
 
 
@@ -570,3 +697,13 @@ table.dataTable tbody th, table.dataTable tbody td {
   animation-duration: 100ms;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite; }
+
+
+
+/* Explosions
+ * --------------------------------------- */
+@-webkit-keyframes wordExplosion {
+    0% { left: 5%;}
+    50%{ left : 20%; top:30px;}
+    100%{ left: 5%;}
+}

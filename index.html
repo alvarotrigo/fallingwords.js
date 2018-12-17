@@ -2,97 +2,111 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title></title>
-	<meta name="author" content="Alvaro Trigo Lopez" />
-	<meta name="Resource-type" content="Document" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta name="author" content="Alvaro Trigo Lopez" />
+    <meta name="Resource-type" content="Document" />
 
-	<!--<link href='http://fonts.googleapis.com/css?family=Quicksand|Raleway:400' rel='stylesheet' type='text/css'>-->
+    <!--<link href='http://fonts.googleapis.com/css?family=Quicksand|Raleway:400' rel='stylesheet' type='text/css'>-->
 
-	<!-- To display the ranking -->
-	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+    <!-- To display the ranking -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
 
-	<script src="jquery.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="styles.css?v=4" />
+    <script src="jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
 </head>
 <body>
 
-<div id="gameInfo">
-	<span>
-		Level
-		<span class="gameInfo-level"></span>
-	</span>
-
-	<span class="gameInfo-score">
-		Score
-		<span class="gameInfo-score-value"></span>
-	</span>
-</div>
 <div id="game">
-	<div id="level">Level</div>
-	<div class="clouds">
-		<div class="cloud" id="cloud1"></div>
-		<div class="cloud" id="cloud2"></div>
-		<div class="cloud" id="cloud3"></div>
-	</div>
-	<div class="city" id="city1">
-		<div class="fire" id="fire1"></div>
-	</div>
-	<div class="city" id="city2">
-		<div class="fire" id="fire2"></div>
-	</div>
-	<div class="city" id="city3">
-		<div class="fire" id="fire3"></div>
-	</div>
-	<div class="gameOver">
-		<div class="gameOver-centered">
-			<h3 class="gameOver-title">Game Over</h3>
-			<div class="gameOVer-info">
-				<p>Your score is</p>
-				<p class="gameOver-score">453,989</p>
-			</div>
-			<form class="addToRanking" action="" method="POST">
-				<label for="name">Add your score to the ranking</label>
-				<p>
-					<input class="gameOver-nameInput" type="text" name="name" id="name" placeholder="Your name" />
-					<button class="addToRanking-button" type="submit">
-                		<div class="addToRanking-loading"></div>
-		                <span class="addToRanking-addScore">Add Score</span>
-		                <span class="addToRanking-addingScore">Adding Score...</span>
-		            </button>
-				</p>
-			</form>
+    <div class="game-info">
+        <span>
+            Level
+            <span class="game-info-level"></span>
+        </span>
 
-		</div>
-	</div>
-	<div class="ranking">
-		<div class="ranking-centered">
-			<h3 class="ranking-title">Ranking</h3>
-			<div class="ranking-info">
-				<p>You are in position <span id="ranking-position"></span> of <span id="ranking-numUsers"></span> players</p>
-			</div>
+        <span class="game-info-score">
+            Score
+            <span class="game-info-score-value"></span>
+        </span>
+    </div>
+    <div class="game-content">
+        <div id="level">Level</div>
+        <div class="clouds">
+            <div class="cloud" id="cloud1"></div>
+            <div class="cloud" id="cloud2"></div>
+            <div class="cloud" id="cloud3"></div>
+        </div>
+        <div class="city" id="city1">
+            <div class="fire" id="fire1"></div>
+        </div>
+        <div class="city" id="city2">
+            <div class="fire" id="fire2"></div>
+        </div>
+        <div class="city" id="city3">
+            <div class="fire" id="fire3"></div>
+        </div>
+    </div>
 
-			<table id="ranking-table">
-        		<thead>
-		            <tr>
-		                <th>Rank</th>
-		                <th>Name</th>
-		                <th>Score</th>
-		                <th>Date</th>
-		            </tr>
-		        </thead>
-		        <tbody>
-		        </tbody>
-		    </table>
+    <div class="startScreen">
+        <div class="startScreen-centered">
+            <button class="startScreen-playButton button">Play</button>
+        </div>
+    </div>
 
-		</div>
-	</div>
+    <div class="gameOver">
+        <div class="gameOver-centered">
+            <h3 class="gameOver-title">Game Over</h3>
+            <div class="gameOVer-info">
+                <p>Your score is</p>
+                <p class="gameOver-score">453,989</p>
+            </div>
+            <form class="gameOver-addToRanking" action="" method="POST">
+                <label for="name">Add your score to the ranking</label>
+                <p>
+                    <input class="gameOver-textInput gameOver-nameInput" type="text" name="name" id="name" placeholder="Your name" />
+                    <input class="gameOver-textInput gameOver-passwordInput" type="text" name="surname" id="surname" placeholder="Your surname" />
+                    <span class="gameOver-notice">
+                        It won't be shown. It is used to overwrite your score if you do better next time and so others can't overwrite your own score using the same name as you. Kind of a password.
+                    </span>
+
+                    <button class="gameOver-addToRanking-button button" type="submit">
+                        <div class="gameOver-addToRanking-loading"></div>
+                        <span class="gameOver-addToRanking-addScore">Add Score</span>
+                        <span class="gameOver-addToRanking-addingScore">Adding Score...</span>
+                    </button>
+                </p>
+            </form>
+
+        </div>
+    </div>
+    <div class="ranking">
+        <div class="ranking-centered">
+            <h3 class="ranking-title">Ranking</h3>
+            <div class="ranking-info">
+                <p>You are in position <span id="ranking-position"></span> of <span id="ranking-numUsers"></span> players</p>
+            </div>
+
+            <table id="ranking-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Score</th>
+                        <th>Name</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
 </div>
 <button id="pause">Pause</button>
 <button id="resume">Resume</button>
 
 
-<script src="actions.js?v=15" type="text/javascript"></script>
+<script src="actions.js?v=3" type="text/javascript"></script>
 
 <!-- To display the ranking -->
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
