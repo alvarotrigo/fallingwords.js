@@ -47,14 +47,42 @@
         </div>
     </div>
 
-    <div class="startScreen">
-        <div class="startScreen-centered">
+    <div class="startScreen game-fullscreen">
+        <div class="startScreen-centered game-centered">
             <button class="startScreen-playButton button">Play</button>
+            <a href="https://twitter.com/imac2" class="startScreen-howWasMade">How was it made?</a>
+            <a href="https://twitter.com/imac2" class="startScreen-by">By @imac2</a>
+            <a href="https://github.com/alvarotrigo/fallingwords.js" title="Github repository" class="startScreen-github">
+                <i class="icon-github"></i>
+            </a>
         </div>
     </div>
 
-    <div class="gameOver">
-        <div class="gameOver-centered">
+    <span class="game-options">
+        <i class="icon-stop" title="Stop game"></i>
+        <i class="icon-volume-high" title="Toggle volume"></i>
+        <i class="icon-info" title="About"></i>
+    </span>
+
+    <div class="game-about game-fullscreen">
+        <a href="#" class="game-about-back"><< Back</a>
+        <h1>FallingWords.js</h1>
+        <h2>Created by <a href="https://twitter.com/imac2">Alvaro Trigo</a></h2>
+        <h3>Available <a href="https://github.com/alvarotrigo/fallingwords.js">at Github</a></h3>
+
+        <h2 class="game-about-instructions">Instructions</h2>
+        <p>The world is getting invaded by very evil words.</p>
+        <p>Now, you are the only one who can save the planet!</p>
+        <ul>
+            <li>Destroying words give you points based on the level you are in. <i class="icon-happy"></i></li>
+            <li>City explosions will rest you points.<i class="icon-sad"></i></li>
+            <li>Your score won't be overwritten if it was lower than the recorded one.</li>
+            <li>Notice the secret word to identify your as a user won't be encrypted.</li>
+        </ul>
+    </div>
+
+    <div class="gameOver game-fullscreen">
+        <div class="game-centered gameOver-centered">
             <h3 class="gameOver-title">Game Over</h3>
             <div class="gameOVer-info">
                 <p>Your score is</p>
@@ -62,11 +90,12 @@
             </div>
             <form class="gameOver-addToRanking" action="" method="POST">
                 <label for="name">Add your score to the ranking</label>
+                <p class="gameOver-sessionUser"></p>
                 <p>
-                    <input class="gameOver-textInput gameOver-nameInput" type="text" name="name" id="name" placeholder="Your name" />
-                    <input class="gameOver-textInput gameOver-passwordInput" type="text" name="surname" id="surname" placeholder="Your surname" />
+                    <input class="gameOver-textInput gameOver-nameInput" type="text" name="name" id="name" placeholder="Your name" required/>
+                    <input class="gameOver-textInput gameOver-passwordInput" type="text" name="secretWord" id="secretWord" placeholder="Choose a secret word" required/>
                     <span class="gameOver-notice">
-                        It won't be shown. It is used to overwrite your score if you do better next time and so others can't overwrite your own score using the same name as you. Kind of a password.
+                        Kind of like a password but not encripted. It is used to overwrite your score if you do better next time and so others can't overwrite your own score using the same name as you. 
                     </span>
 
                     <button class="gameOver-addToRanking-button button" type="submit">
@@ -74,12 +103,13 @@
                         <span class="gameOver-addToRanking-addScore">Add Score</span>
                         <span class="gameOver-addToRanking-addingScore">Adding Score...</span>
                     </button>
+                    <div class="gameOver-viewRanking">Skip and view ranking</div>
                 </p>
             </form>
 
         </div>
     </div>
-    <div class="ranking">
+    <div class="ranking game-fullscreen">
         <div class="ranking-centered">
             <h3 class="ranking-title">Ranking</h3>
             <div class="ranking-info">
@@ -99,14 +129,32 @@
                 </tbody>
             </table>
 
+            <button class="ranking-playButton button">Play again</button>
         </div>
     </div>
 </div>
-<button id="pause">Pause</button>
-<button id="resume">Resume</button>
 
+<button class="pepe">Click</button>
+<button class="add">Add</button>
 
 <script src="actions.js?v=3" type="text/javascript"></script>
+<script type="text/javascript">
+
+    $('.pepe').click(function(){
+
+        var $explosions = document.querySelectorAll('.explosion');
+        $explosions.forEach(function($explosion){
+             $explosion.setAttribute('src', '');
+        });
+
+        var $explosion = document.querySelector('.explosion');
+        setTimeout(function(){
+            $explosion.setAttribute('src', 'imgs/explosion1.gif');
+        }, 1);
+       
+
+    });
+</script>
 
 <!-- To display the ranking -->
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>

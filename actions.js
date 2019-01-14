@@ -18,6 +18,7 @@
     var $g_gameOver = $('.gameOver');
     var g_soundEnabled = true;
     var g_mysound = [];
+    var g_localStorageKey = 'alvaro_fallingwords';
 
     //polify
     var requestAnimFrame = window.requestAnimationFrame ||
@@ -40,14 +41,16 @@
         playSound: function(fileName, options){
             if(g_soundEnabled){
                 var sound = g_mysound[fileName];
-                sound.currentTime = 0;
+                if(sound){
+                    sound.currentTime = 0;
 
-                if(options === 'loop'){
-                    sound.loop = true;
-                    sound.play();
-                }else{
-                    //in order to play the same sound over itself
-                    sound.cloneNode(true).play();
+                    if(options === 'loop'){
+                        sound.loop = true;
+                        sound.play();
+                    }else{
+                        //in order to play the same sound over itself
+                        sound.cloneNode(true).play();
+                    }
                 }
             }
         },
@@ -56,7 +59,19 @@
         * Removes active class from the given element.
         */
         removeActive: function(){
+            console.log("voy");
+            console.log(this);
             $(this).removeClass(ACTIVE);
+
+            //reseting the src attribute so the GIFT can start from the beginning later on
+            this.setAttribute('src', '');
+        },
+
+        removeActiveByItem: function(item){
+            console.log("-----");
+            console.log(item);
+            $(item).removeClass(ACTIVE);
+            item.setAttribute('src', '');
         }
     };
 
@@ -65,6 +80,7 @@
     */
     function missile(word){
         var self = this;
+        var MISSILE_SEL = '.missile';
 
         self.word = word;
         self.$missile = null;
@@ -90,9 +106,14 @@
         self.fire = function(){
             utils.playSound('missile');
             self.$missile[0].classList.add(ACTIVE);
-        }
+        };
 
+        /**
+        * Missile hitting the word
+        */
         self.checkCollision = function(){
+            console.log(self.$missile[0].getBoundingClientRect().top  + ' vs ' + self.word.$word[0].getBoundingClientRect().top);
+            
             if( self.$missile[0].getBoundingClientRect().top <= self.word.$word[0].getBoundingClientRect().top ){
                 utils.playSound('destroyWord');
 
@@ -174,8 +195,8 @@
         */
         self.fire = function(){
             self.$word[0].classList.add(ACTIVE);
-            self.setSpeed(game.g_level);
-            game.g_numFiredWords++;
+            self.setSpeed(gameModel.g_level);
+            gameModel.g_numFiredWords++;
         };
 
         /**
@@ -184,7 +205,7 @@
         * same speed.
         */
         self.setSpeed = function(level){
-            var speed = game.g_levels[level].speed * 1000;
+            var speed = gameModel.g_levels[level].speed * 1000;
 
             //summing or substracting a random number randomly
             var plusOrMinus = Math.random() < 0.5 ? -1 : 1;
@@ -205,16 +226,18 @@
         */
         self.explode = function(){
             var $explosion = $('.explosion').not(ACTIVE_SEL).first();
-            var params = {
-                top: self.$word[0].getBoundingClientRect().top - game.g_explosionDimensions.height/2,
-                left: self.left + self.width / 2 - game.g_explosionDimensions.width/2,
 
-                //forcing the GIF to animate again, we need to add ?x=[RAMDOM STRING]
-                'background-image': 'url(' + g_explosionImage.replace(/\?.*$/,"")+"?x="+Math.random() + ')'
+            //forcing the GIF to animate again
+            $explosion[0].setAttribute('src', 'imgs/explosion1.gif');
+
+            var params = {
+                top: self.$word[0].getBoundingClientRect().top - gameModel.g_explosionDimensions.height/2,
+                left: self.left + self.width / 2 - gameModel.g_explosionDimensions.width/2,
             };
+
             $explosion[0].classList.add(ACTIVE);
             $explosion.css(params);
-            game.g_intervals.explosions = setTimeout(utils.removeActive.bind($explosion), 1100);
+            gameModel.g_intervals.explosions = setTimeout(utils.removeActive.bind($explosion[0]), 1100);
         };
 
         /**
@@ -343,6 +366,7 @@
         var g_limitImpacts = 3;
         var g_cityExplosionImage = 'imgs/city-explosion.gif';
 
+        self.index = gameModel.g_cities.length + 1;
         self.$city = null;
         self.left = 0;
         self.right = 0;
@@ -358,8 +382,10 @@
             self.width = self.$city.width();
             self.right = self.left + self.width;
 
-            var cityExplosion = document.createElement('div');
+            //creating temporal explosion element to get its size
+            var cityExplosion = document.createElement('img');
             cityExplosion.className = 'city-explosion';
+            cityExplosion.src = '';
             document.body.appendChild(cityExplosion);
 
             self.g_cityExplosionDimensions = {
@@ -373,23 +399,34 @@
         };
         
         /**
-        * Explodes the city.
+        * Creating the explosion elements for each city.
         */
         self.createExplosion = function(){
             //city explosions
             for(var i = 0; i < 3; i++){
-                var cityExplosion = document.createElement('div');
+                var cityExplosion = document.createElement('img');
                 var left = self.left + self.width / 2 - self.g_cityExplosionDimensions.width/2;
     
                 cityExplosion.className = 'city-explosion';
                 cityExplosion.style.left = left + 'px';
+                cityExplosion.id = id + '' + (i + 1);
+
+                //preloading image
+                cityExplosion.src = 'imgs/city-explosion'+self.index+ '.gif';
 
                 self.explosions.push({
                     item: cityExplosion,
-                    isVisible: false
+                    isVisible: false,
+                    index: i + 1, 
+                    removeActive: function(){
+                        utils.removeActiveByItem(this.item);
+                    }
                 });
 
                 $g_game[0].appendChild(cityExplosion);
+
+                //hidding the image again, so the GIF can start from the beginning
+                setTimeout(utils.removeActive.bind(cityExplosion), 0);
             }
         };
 
@@ -397,18 +434,24 @@
         * Exploding the city.
         */
         self.explode = function(){
-            var $cityExplosion = self.explosions.reduce(function(explosion){
-                if(!explosion.isVisible){
-                    return explosion;
-                }
-            }).item;
+            console.log(self.explosions);
+            var cityExplosion = self.explosions.filter(function(explosion){
+                console.log(explosion);
+                return !explosion.isVisible;
+            })[0];
+            console.log(cityExplosion);
+            cityExplosion.isVisible = true;
+            $cityExplosion = cityExplosion.item;
 
             $cityExplosion.classList.add(ACTIVE);
+            $cityExplosion.src = 'imgs/city-explosion'+self.index+ '.gif';
 
-            //forcing the GIF to animate again, we need to add ?x=[RAMDOM STRING]
-            $cityExplosion.style.backgroundImage = 'url(' + g_cityExplosionImage.replace(/\?.*$/,"")+"?x="+Math.random() + ')';
-
-            setTimeout(utils.removeActive.bind($cityExplosion), 1330);
+            setTimeout(function(){
+                cityExplosion.isVisible = false;
+                console.log("quito.....");
+                console.log(cityExplosion);
+                cityExplosion.removeActive();
+            }, 1330);
 
             self.shake();
         };
@@ -433,18 +476,18 @@
             self.impacts++;
 
             if( self.impacts >= g_limitImpacts){
-                self.$city[0].style.backgroundColor = 'black';
-                self.$city[0].classList.add('state4');
+                self.$city[0].classList.add('state4')
+                self.$city[0].classList.remove('state3');
+                console.error("removing city....");
                 //delete game.g_cities[key];
-                game.removeCity(self);
+                gameModel.removeCity(self);
             }
             else if(self.impacts == 1){
-                self.$city[0].style.backgroundColor = 'yellow';
                 self.$city[0].classList.add('state2');
             }
             else if(self.impacts == 2){
-                self.$city[0].style.backgroundColor = 'orange';
                 self.$city[0].classList.add('state3');
+                self.$city[0].classList.remove('state2');
             }
         };
 
@@ -456,23 +499,18 @@
         return self;
     }
 
-    window.fallingWords = function(){
+    function fallingWords(){
         var self = this;
 
         var WORD_SEL = '.word';
-        var MISSILE_SEL = '.missile';
-
-        var g_wordsList = ['church','charge'];
         var g_wordsList = ['abrigo','agujeta','calcetines','calzoncillo','camisa','camiseta','corbata','gorra','algodon','blusa','bolsa','cierre','cinturon','falda','guantes','medias','plantas','arbol','arbusto','cactus','abeja','alacran','alce','aguila','anguila','araña','ardilla','ardillita','armadillo','bisonte','lechuza','burro','caballo','cabra','caiman','camaleon','cardenal','cebra','cerdo','cocodrilo','colmillo','conejo','cisne','cucaracha','cuerno','cuervo','elefante','escarabajo','gato','gaviota','gorrion','grillo','gusano','halcon','hipopotamo','hormiga','babero','biberon','carrito','chupador','cuna','baño','bañera','champu','desague','ducha','espejo','cocina','abrelatas','caldero','colador','congelador','cuchara','destapador','escurridor','estufa','fregadero','gabinete','horno','horno','jarra','cuarto','aspiradora','escoba','lavadora','limpiadora','cuarto','cama','mesita','comoda','almohada','cobija','escalera','jarron','lampara','mesita','pared','pintura','repisa','sofa','sillon','herramientas','metrica','destornillador','formon','aeropuerto  ','bolso','equipaje','restaurante','cocinero','menu','gasolinera','grandes','playa','aletas','arena','alga','castillo','bronceadora','gafas','apartamentos','ascensor','banca','basurero','edificio','oficinas','tornado','huracan','inundacion','lluvia','nieve','nublado','hace','sol','tenis','basquetbol','golf','futbol','futbol','voleibol','ping','badminton','beisbol','guitarra','tambores','trompeta','rojo','azul','amarillo','verde','violeta','morado','limon','lima','frijoles','tomate','remolacha','rabano','mantequilla','miel','nuez','mermelada','jalea','jugo','dulce','mayonesa','kechup','mostaza','piña','banana','durazno','albaricoque','pera','uva','pasa','harina','comida','familia','mama','papa','hermano','hermana','abuelos','abuela','abuelo','primos','sobrino','cuñado','cuñada','suegra','cajuela','ventana','rueda','llanta','claxon','volante','chofer','pajarita','pantalones','sombrero','sueter','traje','zapatos','pijama','pantaleta','pantimedia','sandalias','vestido','zapatos','hoja','margarita','tallo','tulipan','violeta','rosa','iguana','jirafa','lagartija','leon','libelula','llama','loro','mantis','mariposa','mono','mosca','mosquito','pajaro','paloma','perro','petirrojo','pez','oso','oveja','rana','rata','raton','raya','renacuajo','rinoceronte','salmon','saltamontes','tiburon','tigre','tortuga','trompa','trucha','vaca','venado','zorro','zancudo','cuna','oso','pañal','esponja','excusado','jabon','jabonera','lavamanos','tina','toalla','lavaplatos','licuadora','mesa','nevera','olla','plato','pimentero','refrigerador','salero','sarten','servilleta','tapa','tenedor','tostador','vaporera','vaso','recogedor','secadora','despertador','sabanas','armario','colgador','techo','muebles','mesa','cama','sillon','silla','escritorio','piano','basurero','llave','martillo','sierra','maleta','mesa','camarera','bolso','oferta','mar','onda','orilla','toalla','traje','sombrilla','oficina','autobus','calor','temperatura','termometro','nebuloso','neblina','ventoso','hace','humedad','nube','jockey','rugby','equitacion','natacion','equipo','piano','letra','anaranjado','rosa','marron','negro','blanco','aperitivo','aguacate','carnederes','desayuno','coliflor','apio','queso','pollo','postre','cena','huevo','pescado','hamburguesa','hotdog','papas','almuerzo','lechuga','leche','puerco','papas','ensalada','sandwich','sopa','azucar','pavo','agua','helado','suegro','novio','hijo','hija','nuera','yerno','amigo','novio','marido','esposa','madre','padre','sobrina','gasolina','cinturon'];
-        //var g_wordsList = ['unbrave','unbruised','journeyer','ives','ursa','contented','ionian','maize','geordie','tanbark','gruelling','saadi','snowbound','glegness','eternise','augmentor','kinfolks','consist','point','pouter','precisian','sundew','tomium','sparrow','delative','polyxenus','unawake','undue','darius','pannage','chillum','amanda','lam','nicotine','handiwork','dumpily','beadily','sukkoth','bonelike','hylozoic','puss','gibbon','suharto','molasses','checkroom','agora','mobocracy','cosiest','slatier','anarch','redundant','corpora','spinozism','kloesse','xanthous','ozocerite','maremma','sleepers','swit','fare','lunated','meleager','prevision','tumaco','unfetter','emissary','botvinnik','rev','giorgione','exciting','famished','kenova','unhuddle','kubango','prelect','hard','andoroba','nauch','publicity','apodemal','argyle','bismarck','hottest','expansile','bigger','poromeric','heron','jungfrau','oidia','pandavas','razeeing','zymologic','roseless','delicia','agacles','unjuicily','coalesce','revoting','thimphu','anatomy','feminie','pyxidia','parousia','shabbier','tempura','vagal','diatribe','deftly','ava','ginkgo','unexhumed','cocoyam','aydelotte','connexion','bagh','alost','machinist','sloane','china','attingent','pustule','yirr','valdosta','interlace','popish','unknelled','redenied','phallus','epaulet','unechoic','angora','church','teledu','quickly','reground','runty','cheshire','scurrile','sheeney','fathomer','sarasvati','gypsyism','ignition','spewer','tankless','unusurped','vale','rejection','anxiety','lacuna','madonna','wider','profferer','sporty','markevich','burger','ephippia','jail','davey','molise','aft','forth','caldaria','outjet','zionist','halachot','recourse','margareta','danseuse','kamet','redefeat','ivor','sitzkrieg','judaea','dupr','backward','gari','discomfit','calgary','complice','colonised','mass','pretender','unionize','manoeuvre','holloaed','paccha','nereid','cardhouse','unfacile','bouillon','accessory','american','unequal','quidnunc','observe','irishised','hoylake','tarried','decried','merl','urolith','trustable','similarly','melpomene','fraught','mango','dana','palencia','margin','zibeline','elucidate','nouma','cete','larum','unpeopled','kanji','unstrewn','aslant','bing','shovel','firework','rampager','antipodes','phrensied','eulogy','idiotise','adamant','preguess','showmanly','tendril','felicidad','liou','senza','ambulated','siloxane','cunt','scientist','illumed','unsmooth','agonist','pyalla','submiss','celluloid','flighty','apriorism','minuend','choicer','preexact','fushun','contusion','acol','foreskin','hostaging','lynchet','atresia','exalter','adieus','unflowing','cousinry','quittable','atomist','rooflike','gavotte','faunally','steampipe','canoodle','unsponged','boltlike','penance','podiums','commit','finalize','landsmaal','natant','tropical','enigma','ticknor','nastiness','varicose','kopje','umbonal','vignette','warded','rainbird','mewar','bullet','narceine','leangle','curtesy','devastate','furrily','strobic','theomancy','mfd','embolus','perutz','eurhythmy','sayers','shapka','goadlike','timbale','ligating','cutwater','salmon','fretwork','mobutu','descartes','craftiest','idyll','capsid','handsewn','abbotcy','absonant','deface','scroop','rort','pup','incarnate','kirigami','frog','unicycle','burgher','allobaric','bizerta','disjaskit','void','dinkiest','gawkier','duello','boresome','snowcreep','autoharp','begabled','foxberry','lumberer','purer','muticous','auber','topiaries','hereupon','elegantly','ranee','haywire','unbay','sorceries','baker','caucasia','cooing','underfed','biography','nonethnic','ozonizer','bowerlike','cullis','pip','exeter','cloakroom','shembe','mycelium','falderol','saltier','smetana','attrahent','diabolize','vampiric','pretimely','fetial','asterion','topmost','phyton','aseity','autobahn','impinger','draftiest','chapatti','orator','dunedin','beatitude','danbury','greg','celebrate','scrip','pithead','iapigia','carbuncle','manila','holler','marital','bisection','shapable','terrier','gullable','syndromic','overwrite','niceness','athetoid','duka','degummed','floc','wady','dogcart','vatted','deckhead','sapwood','addition','plication','sucrose','stanton','lollardy','befall','teughness','alcalde','galumph','panoptic','oriental','wellesley','mutualism','ductwork','everybody','covin','cosiness','pelican','meagerly','wittily','outshaped','baghlan','kelson','vivace','wagnerite','caboodle','wifelike','foretaste','enuring','aspen','cavatina','durban','dulciana','dissenter','outreckon','richfield','retrorse','kerkyra','diosgenin','engage','pulsating','cheddar','melodist','hide','thiazole','bassano','loppy','dabble','nerve','oncost','kay','usa','hechshers','afire','enfetter','useable','poleax','decameron','subhall','ophore','gentisate','cultigen','ampersand','genetic','unwhite','prologise','brynza','unnipped','jag','keifer','schedular','creosotic','homocercy','trogon','chuprassi','pizzicato','lilyan','enc','heeze','verier','archfiend','nares','sorgho','tuberoid','pickled','peanuts','casemate','frond','ghazi','sloshiest','viand','volta','thespiae','greenberg','brand'];
-        
+        //var g_wordsList = ['patience','teach','exemption','excuse','beach','unlikely','regret','hypothesize','sting','resolution','clear','democratic','album','manufacturer','guard','articulate','freshman','castle','willpower','major','ground','robot','capital','share','beautiful','bible','intention','agency','provision','slave','bucket','cotton','omission','sticky','talented','separate','dictate','determine','occupy','dragon','definite','assertive','sculpture','colorful','steak','stadium','stall','cheese','cooperation','classroom','plain','voyage','laborer','ankle','broccoli','permission','ribbon','slippery','radiation','emphasis','length','middle','grave','reluctance','blonde','revolution','generation','reach','harmful','quarrel','undertake','formula','likely','detail','torture','ethnic','necklace','index','offspring','thick','captivate','virus','dangerous','experiment','drive','scatter','persist','preference','clothes','swarm','abolish','vigorous','jewel','paint','cucumber','environment','crude','lesson','departure','perforate','horizon','greeting','correspond','mathematics','basic','conflict','timber','black','drain','suppress','vegetation','consumer','serve','leaflet','fantasy','prayer','seminar','address','favour','ideal','tired','exercise','application','convulsion','refund','house','defend','facility','exploit','college','straw','build','dairy','depressed','terrify','depression','feminist','liver','tribe','advocate','beneficiary','shift','community','rugby','arrange','petty','elite','patent','singer','debut','animal','transform','magnetic','bloodshed','penny','denial','shareholder','aloof','bathtub','default','grind','functional','assembly','cultural','healthy','carve','economic','admiration','carbon','shortage','dignity','overeat','difficult','copyright','sacred','choose','rescue','pocket','tight','pupil','stitch','domination','haircut','romantic','bubble','district','sunshine','dozen','arena','glacier','passage','contain','dimension','prosper','morsel','protection','reporter','active','science','hover','selection','estimate','mouse','strange','stock','appointment','throat','kidney','protect','distinct','count','safari','complication','offend','perfect','exchange','marathon','fireplace','wheat','frequency','explode','embrace','credit','deputy','consider','copper','coach','crouch','tablet','reactor','strict','visible','result','recession','constraint','concentration','pilot','quest','distort','useful','needle','ensure','bowel','aspect','pedestrian','psychology','siege','speech','solution','surface','monkey','horse','disaster','prosecution','operational','carpet','circle','wisecrack','offender','light','appetite','automatic','deserve','killer','border','thigh','deposit','neighborhood','tract','crowd','awful','fence','confuse','example','executrix','strong','craft','cheek','occupation','breed','report','pneumonia','extension','translate','funny','helmet','indoor','volume','activate','custody','mistreat','credibility','missile','reckless','institution','biography','bring','charm','empirical','consideration','participate','conception','paradox','virgin','shape','understanding','import','offer','objective','thesis','cinema','north','criminal','interference','sheep','ambition','blank','complex','danger','carrot','joint','horror','nervous','bridge','restaurant','frank','horseshoe','railroad','stomach','start','eject','literature','assault','prediction','exile','advantage','blade','interface','knife','short','monster','particle','tooth','total','problem','waterfall','bargain','preoccupation','trunk','publisher','rider','drink','office','superintendent','endorse','reservoir','admission','fastidious','whisper','linen','lifestyle','insert','consultation','punch','scrap','comfort','account','sanctuary','stroll','counter','common','behavior','reverse','insure','noise','combine','agent','platform','welcome','license','lunch','gossip','restless','drown','bracket','imposter','unlike','characteristic','refrigerator','compose','appoint','nonsense','print','toast','donor','front','influence','motorcycle','infrastructure','communication','pumpkin','spoil','acquit','confusion','hilarious','kinship','moment','building','memorial','exclusive','adult','speculate','crosswalk','march','justify','cruelty','asylum','inquiry','attachment','stand','presence','trend','anniversary','favor','clinic','telephone','remedy','evolution','multiply','domestic','discrimination','federation','tiger','seize','agreement','vegetable','allocation','direction','essay','ideology','still','digress','licence','voucher','desire','casualty','disappoint','confession','flourish','concrete','compete','payment','spectrum','source','firefighter','leash','hunter','medicine','estate','fountain','variable','torch','ostracize','frame','Koran','progressive','acceptance','relax','multimedia','coincidence','chord','future','agriculture','representative','absence','guerrilla','customer','civilian','proposal','cluster','dollar','circulate','committee','hypnothize','bounce','equinox','favourite','attack','conservative','uniform','researcher','contract','enthusiasm','hardware','review','minority','glide','money','discovery','investment','giant','grateful','volunteer','refer','instruction','buttocks','piece','dinner','assumption','vision','pepper','pledge','grandmother','judge','ambiguous','coincide','model','glimpse','tumble','assessment','failure','reflect','supplementary','recover','shell','construct','effective','progress','liberty','fossil','confine','hardship','mixture','coerce','syndrome','doubt','encourage','garlic','means','command','official','addition','chapter','cause','password','matter','background','flight','argument','hostile','suffer','trivial','topple','harsh','fashion','reasonable','incredible','similar','chemistry','deteriorate','polish','freighter','liberal','election','intervention','tension','finished','devote','mosquito','advance','training','investigation','education','rough','pigeon','important','contact','chauvinist','bullet','operation','moving','history','promotion','sequence','artificial','expand','squash','lemon','reform','manual','ballet','therapist','recruit','develop','thirsty','promote','delicate','econobox','earthflax','hospitality','global','claim','jelly','corner','economics','resident','enjoy','bother','theme','wonder','recommendation','staff','chain','sacrifice','stunning','midnight','violation','twitch','blast','peace','forget','sound','acceptable','bench','flash','screen','impulse','compensation','speed','patch','astonishing','merit','explosion','innovation','affinity','timetable','invisible','evoke','recycle','constant','dress','conviction','first','shaft','opera','hunting','revise','understand','suggest','close','medal','absent','retreat','ministry','worth','posture','fragment','basin','escape','member','extend','fibre','chocolate','highway','tumour','thought','distortion','lonely','cater','reliance','comedy','cupboard','recommend','dedicate','overall','order','snatch','scream','prize','flexible','agile','decrease','trace','development','factory','alcohol','cover','diplomat','retired','venus','burial','vague','expertise','energy','retiree','photography','feign','excess','misery','amber','option','theory','invasion','sleep','dilute','flavor','marketing','haunt','analysis','trial','snake','filter','steep','consensus','integrity','publish','struggle','weave','lover','disappointment','guess','cancer','marriage','printer','aluminium','association','family','purpose','gravity','muscle','treasurer','inflation','hypothesis','shallow','foster','sister','reception','judgment','implicit','outer','concession','promise','inspire','legislation','grounds','habitat','clarify','remember','steel','preparation','commemorate','dough','constitutional','entitlement','headquarters','bloody','digital','store','narrow','category','football','hobby','conservation','pursuit','abnormal','confront','tolerant','harvest','tournament','smile','specimen','relative','efflux','dribble','spine','positive','version','europe','expect','tiptoe','commitment','undermine','economist','stuff','yearn','heroin','paralyzed','calculation','respectable','exempt','creation','stimulation','rhetoric','shine','answer','affair','popular','title','alarm','gradual','witch','graze','proportion','elbow','large','stain','wound','remain','accessible','overwhelm','character','reality','growth','smooth','sweater','powder','restrict','adjust','press','strategic','collapse','lease','aviation','announcement','position','leadership','discuss','minimum','merchant','stable','genuine','survivor','arrogant','coast','detector','straight','weight','neighbour','heart','loose','collect','height','classify','survey','replacement','invite','cross','observer','fruit','overcharge','content','grand','feedback','conceive','slice','dismissal','unpleasant','critic','bless','route','hammer','abbey','musical','campaign','engine','indulge','conference','calorie','cherry','flour','ordinary','aquarium','organize','float','notion','consolidate','terminal','oppose','pasture','foundation','plagiarize','module','transport','extent','latest','accident','resource','young','particular','rotation','labour','avenue','society','canvas','increase','environmental','asset','break','solid','terrace','person','miracle','disagree','suspect','intensify','discriminate','aisle','cancel','obscure','wedding','velvet','budget','retire','obstacle','spite','place','insist','museum','facade','ceiling','ancestor','wreck','brave','revenge','soldier','proud','broadcast','childish','exaggerate','knock','congress','sheet','plane','overlook','novel','brother','perception','revival','delivery','conscious','acute','appendix','redundancy','bleed','adventure','scandal','lobby','taste','overview','practical','coffin','obligation','integration','greet','rotate','negative','touch','demonstration','instrument','skate','legislature','harbor','fairy','coffee','approve','cabin','contemporary','veteran','crown','computer','chase','register','twist','fault','image','circulation','guideline','medieval','drift','wardrobe','secretion','accumulation','bitter','surgeon','prove','flesh','manufacture','value','cigarette','acquaintance','contempt','closed','field'];
         //var g_wordsList = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'c', 'd','a', 'b', 'c', 'd', 'e', 'f', 'g', 'h','a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-        window.words = g_wordsList;
 
         var g_firedMissiles = [];
         var g_isGamePaused = false;
         var g_isGameOver = false;
-        var g_username;
+        var g_hasGameStarted = false;
         var g_sounds = [
             'gameOver',
             'background',
@@ -622,17 +660,26 @@
                 speed: 6,
                 fallingLapse: 400,
                 words: 34
+            },
+            '21': {
+                speed: 6,
+                fallingLapse: 300,
+                words: 34
+            },
+            '22': {
+                speed: 5,
+                fallingLapse: 300,
+                words: 34
+            },
+            '23': {
+                speed: 5,
+                fallingLapse: 250,
+                words: 34
             }
         };
 
         //init
         self.init = function(){
-            self.g_cities.push(new city('city1'));
-            self.g_cities.push(new city('city2'));
-            self.g_cities.push(new city('city3'));
-
-            createMissilesExplosions();
-
             bindEvents();
 
             return self;
@@ -643,22 +690,66 @@
                 .on('click', '#pause', pauseGame)
                 .on('click', '#resume', pauseGame)
                 .on('submit', '.gameOver-addToRanking', addScore)
-                .on('click', '.startScreen-playButton', startGame);
+                .on('click', '.startScreen-playButton', startGame)
+                .on('click', '.ranking-playButton', playAgain)
+                .on('click', '.gameOver-logout', logout)
+                .on('click', '.gameOver-viewRanking', viewRanking)
+                .on('click', '.icon-volume-high, .icon-volume-mute2', toggleSound)
+                .on('click', '.icon-info, .game-about-back', toggleAbout)
+                .on('click', '.icon-stop', function(){
+                    gameOver();
+                    $('.startScreen').show();
+
+                });
 
             document.addEventListener('keydown', onKeyDown);
+        }
+
+        /**
+        * Restarts the game and hides the game over screen
+        */
+        function playAgain(){
+            $('.ranking').hide();
+
+            //removing states for cities
+            $('.city').attr('class', 'city');
+
+            //removing any left words & missiles from the DOM 
+            $('.word, .missile').remove();
+
+            //binding events again
+            bindEvents();
+
+            startGame();
         }
 
         /**
         * Starts the game.
         */
         function startGame(){
-            $('.startScreen').hide();
+            self.g_cities = []
+            self.g_words = [];
+            self.g_firedWords = [];
+            self.g_numFiredWords = 1;
+            self.g_score = 0;
+            self.g_numWordsDestroyed = 0;
+            self.g_level = 1;
+            g_firedMissiles = [];
 
-            //adding words to the page
+            g_hasGameStarted = true;
+            g_isGameOver = false;
+
+            self.g_cities.push(new city('city1'));
+            self.g_cities.push(new city('city2'));
+            self.g_cities.push(new city('city3'));
+
+            createMissilesExplosions();
+
             createSounds(g_sounds);
-            
             throwWordsInterval();
             checkCollisions();
+
+            $('.startScreen').hide();
 
             utils.playSound('background', 'loop');
 
@@ -678,18 +769,10 @@
 
             //clearing intervals
             for(var property in self.g_intervals){
-                clearInterval(self.g_intervals[property]);
-            };
-        }
-
-        /**
-        * Resuming the game.
-        */
-        function resumeGame(e){
-            if(e){
-                e.preventDefault();
+                if(self.g_intervals[property]){
+                    clearInterval(self.g_intervals[property]);
+                }
             }
-            g_isGamePaused = false;
         }
 
         /**
@@ -712,15 +795,23 @@
         */
         function createMissilesExplosions(){
             var wordsExplosions = '';
-            for(var i = 0; i < 7; i++){
-                wordsExplosions = wordsExplosions + '<div class="explosion"></div>';
+            for(var i = 0; i < 3; i++){
+                wordsExplosions = wordsExplosions + '<img class="explosion" src="imgs/explosion1.gif" />';
             }
             $g_game.append(wordsExplosions);
 
             self.g_explosionDimensions = {
                 width: $('.explosion').first().width(),
                 height: $('.explosion').first().height()
-            };            
+            };
+
+            var $explosions = document.querySelectorAll('.explosion');
+            setTimeout(function(){
+                $explosions.forEach(function($explosion){
+                    //removing the image so the GIF can start from the beginning later
+                    $explosion.setAttribute('src', '');
+                });
+            },0);
         }
 
         /**
@@ -739,14 +830,15 @@
                 $g_level.style.display = 'none';
             }
 
-            //let's throw words!
+            //let's throw some words!
             if(self.g_numFiredWords <= self.g_levels[self.g_level].words){
                 //firing a word
-                self.g_words[0].fire();
-                self.g_firedWords.push(self.g_words[0]);
+                var random = utils.getRandom(self.g_words.length);
+                self.g_words[random].fire();
+                self.g_firedWords.push(self.g_words[random]);
 
                 //removing the word from on index 0 from our g_words array and g_wordsList array
-                self.g_words.splice(0, 1);
+                self.g_words.splice(random, 1);
             }
 
             //reached the end of the level?
@@ -772,8 +864,8 @@
         */
         function setLevel(level){
             var levelInfo = document.querySelector(".game-info .game-info-level");
-            levelInfo.innerHTML = level;
-            $g_level.innerHTML = "Level" + level;
+            levelInfo.innerHTML = level; 
+            $g_level.innerHTML = "Level " + level;
             $g_level.style.display = 'block';
             utils.playSound('newLevel');
 
@@ -813,14 +905,13 @@
         /**
         * When pressing a key.
         */
-        var pepe = 1;
         function onKeyDown(e) {
+            if(!g_hasGameStarted){
+                return;
+            }
+
             var value = e.key;
             var isAnyWordActive = false;
-
-            //utils.playSound('missile');
-            //document.querySelectorAll('.missile')[pepe].classList.add(ACTIVE);
-            //pepe++;
 
             //for each non active letter of each active word
             for(var a = 0; a < self.g_firedWords.length; a++){
@@ -871,7 +962,6 @@
         */
         function checkCollisions(){
             var missile;
-            var word;
             var i;
 
             for(i = 0; i < g_firedMissiles.length; i++){
@@ -918,6 +1008,7 @@
             utils.playSound('gameOver');
             document.getElementById('level').style.display = 'none';
             $g_gameOver.addClass(ACTIVE);
+            $g_game.removeClass(ACTIVE);
             $g_gameOver.find('.gameOver-score').text(numberWithCommas(self.g_score));
 
             //unbinding events
@@ -931,45 +1022,66 @@
 
             //clearing intervals
             for(var property in self.g_intervals){
-                clearInterval(self.g_intervals[property]);
-            };
+                if(self.g_intervals[property]){
+                    clearInterval(self.g_intervals[property]);
+                }
+            }
 
             setTimeout(function(){
                 pauseSounds(g_sounds);
             }, 3700);
 
+            var sessionData = localStorage.getItem(g_localStorageKey);
+            if(sessionData){
+                var userData = JSON.parse(sessionData);
+                $('.gameOver-nameInput, .gameOver-passwordInput, .gameOver-notice').hide().removeAttr('required');
+                $('.gameOver-nameInput').val(userData.name);
+                $('.gameOver-passwordInput').val('nothing');
+                $('.gameOver-sessionUser').html("as <span>" + userData.name + '</span><span class="gameOver-logout">| Logout</span>').show();
+            }
+
             $('.modal-addScore').show();
         }
 
-        self.test = function(){
+        function logout(){
+            $.get('http://localhost/extensions/experiments/game-ranking/?action=logout', function(result){
+                localStorage.removeItem(g_localStorageKey);
+                $('.gameOver-nameInput, .gameOver-passwordInput, .gameOver-notice').show();
+                $('.gameOver-nameInput, .gameOver-passwordInput').prop('required', true);
+                $('.gameOver-nameInput').val('');
+                $('.gameOver-passwordInput').val('');
+                $('.gameOver-sessionUser').hide();
+            });
+        }
 
+        self.test = function(){
             var result = {
                 message: "Your score has been added to the ranking!",
                 success: true,
                 users: [
-                    {id: "5", name: "alvaro", score: "1000", created: "2018-12-07 16:54:58"},
-                    {id: "6", name: "alvaro", score: "1000", created: "2018-12-07 16:56:54"},
-                    {id: "7", name: "alvaro", score: "1000", created: "2018-12-10 13:27:04"},
-                    {id: "8", name: "alvaro", score: "1000", created: "2018-12-10 13:28:14"},
-                    {id: "9", name: "pepito", score: "1000", created: "2018-12-10 13:33:41"},
-                    {id: "10", name: "juanito", score: "1000", created: "2018-12-10 13:58:11"},
-                    {id: "11", name: "fadsfaf", score: "0", created: "2018-12-07 16:24:52"},
-                    {id: "12", name: "fdasfa", score: "0", created: "2018-12-07 16:45:19"},
-                    {id: "13", name: "alvaro", score: "0", created: "2018-12-07 16:45:39"},
-                    {id: "14", name: "alvaro", score: "1000", created: "2018-12-07 16:56:54"},
-                    {id: "15", name: "alvaro", score: "1000", created: "2018-12-10 13:27:04"},
-                    {id: "16", name: "alvaro", score: "1000", created: "2018-12-10 13:28:14"},
-                    {id: "17", name: "pepito", score: "1000", created: "2018-12-10 13:33:41"},
-                    {id: "18", name: "juanito", score: "1000", created: "2018-12-10 13:58:11"},
-                    {id: "19", name: "fadsfaf", score: "0", created: "2018-12-07 16:24:52"},
-                    {id: "20", name: "fdasfa", score: "0", created: "2018-12-07 16:45:19"},
-                    {id: "21", name: "alvaro", score: "0", created: "2018-12-07 16:45:39"}
+                    {id: "5", name: "alvaro", score: "1000", display_created: "1pepe", created: "2018-12-07 16:54:58"},
+                    {id: "6", name: "alvaro", score: "1000", display_created: "8pepe", created: "2018-12-07 16:56:54"},
+                    {id: "7", name: "alvaro", score: "1000", display_created: "3pepe", created: "2018-12-10 13:27:04"},
+                    {id: "8", name: "alvaro", score: "1000", display_created: "9pepe", created: "2018-12-10 13:28:14"},
+                    {id: "9", name: "pepito", score: "1000", display_created: "5pepe", created: "2018-12-10 13:33:41"},
+                    {id: "10", name: "juanito", score: "1000", display_created: "7pepe", created: "2018-12-10 13:58:11"},
+                    {id: "11", name: "fadsfaf", score: "0", display_created: "8pepe", created: "2018-12-07 16:24:52"},
+                    {id: "12", name: "fdasfa", score: "0", display_created: "6pepe", created: "2018-12-07 16:45:19"},
+                    {id: "13", name: "alvaro", score: "0", display_created: "3pepe", created: "2018-12-07 16:45:39"},
+                    {id: "14", name: "alvaro", score: "1000", display_created: "1pepe", created: "2018-12-07 16:56:54"},
+                    {id: "15", name: "alvaro", score: "1000", display_created: "7pepe", created: "2018-12-10 13:27:04"},
+                    {id: "16", name: "alvaro", score: "1000", display_created: "2pepe", created: "2018-12-10 13:28:14"},
+                    {id: "17", name: "pepito", score: "1000", display_created: "8pepe", created: "2018-12-10 13:33:41"},
+                    {id: "18", name: "juanito", score: "1000", display_created: "pepe", created: "2018-12-10 13:58:11"},
+                    {id: "19", name: "fadsfaf", score: "0", display_created: "9pepe", created: "2018-12-07 16:24:52"},
+                    {id: "20", name: "fdasfa", score: "0", display_created: "6pepe", created: "2018-12-07 16:45:19"},
+                    {id: "21", name: "alvaro", score: "0", display_created: "2pepe", created: "2018-12-07 16:45:39"}
                 ]
             };
 
-            if(result['success']){
-                if(result['message']){
-                    $g_gameOver.find('.gameOver-message').html(result['message']);
+            if(result.success){
+                if(result.message){
+                    $g_gameOver.find('.gameOver-message').html(result.message);
 
                     //adding the ranking column
                     result.users.map(function(user, index){
@@ -981,7 +1093,7 @@
                     showRanking(result.users);
                 }
             }else{
-                alert("Error adding the score! Contact Alvaro! @imac2")
+                alert("Error adding the score! Contact Alvaro! @imac2");
             }
         };
 
@@ -991,64 +1103,48 @@
         function addScore(e){
             e.preventDefault();
             var $addScoreButton = $('.gameOver-addToRanking-button');
+            var name = $('.gameOver-nameInput').val();
+            var secretWord = $('.gameOver-passwordInput').val();
 
             //sending the data already? Bye bye my friend!
-            if($addScoreButton.hasClass(ACTIVE)){
+            if($addScoreButton.hasClass(ACTIVE) || !name.length || !secretWord.length){
                 return;
             }
 
-            g_username = $g_gameOver.find('#name').val();
             $addScoreButton.addClass(ACTIVE);
 
             var params = {
-                name: g_username,
+                name: name,
                 score: self.g_score,
-                surname: $g_gameOver.find('#surname').val()
+                secret_word: secretWord
             };
 
+            //saving the users info
+            localStorage.setItem(g_localStorageKey, JSON.stringify({name: params.name, secret_word: params.secret_word}));
+
             $.post('http://localhost/extensions/experiments/game-ranking/?action=save', params, function(result){
+                if(result.success){
+                    if(result.message){
+                        $g_gameOver.find('.gameOver-message').text(result.message);
 
-                var result = {
-                    message: "Your score has been added to the ranking!",
-                    success: true,
-                    users: [
-                        {id: "5", name: "alvaro", score: "1000", created: "2018-12-07 16:54:58"},
-                        {id: "6", name: "alvaro", score: "1000", created: "2018-12-07 16:56:54"},
-                        {id: "7", name: "alvaro", score: "1000", created: "2018-12-10 13:27:04"},
-                        {id: "8", name: "alvaro", score: "1000", created: "2018-12-10 13:28:14"},
-                        {id: "9", name: "pepito", score: "1000", created: "2018-12-10 13:33:41"},
-                        {id: "10", name: "juanito", score: "1000", created: "2018-12-10 13:58:11"},
-                        {id: "11", name: "fadsfaf", score: "0", created: "2018-12-07 16:24:52"},
-                        {id: "12", name: "fdasfa", score: "0", created: "2018-12-07 16:45:19"},
-                        {id: "13", name: "alvaro", score: "0", created: "2018-12-07 16:45:39"},
-                        {id: "14", name: "alvaro", score: "1000", created: "2018-12-07 16:56:54"},
-                        {id: "15", name: "alvaro", score: "1000", created: "2018-12-10 13:27:04"},
-                        {id: "16", name: "alvaro", score: "1000", created: "2018-12-10 13:28:14"},
-                        {id: "17", name: "pepito", score: "1000", created: "2018-12-10 13:33:41"},
-                        {id: "18", name: "juanito", score: "1000", created: "2018-12-10 13:58:11"},
-                        {id: "19", name: "fadsfaf", score: "0", created: "2018-12-07 16:24:52"},
-                        {id: "20", name: "fdasfa", score: "0", created: "2018-12-07 16:45:19"},
-                        {id: "21", name: "alvaro", score: "0", created: "2018-12-07 16:45:39"}
-                    ]
-                };
-
-                if(result['success']){
-                    if(result['message']){
-                        $g_gameOver.find('.gameOver-message').html(result['message']);
-
-                        //adding the ranking column
-                        result.users.map(function(user, index){
-                            user.rank = index + 1;
-                        });
-
-                        $addScoreButton.removeClass(ACTIVE);
-
-                        showRanking(result.users);
+                        showRanking(result);
                     }
                 }else{
-                    alert("Error adding the score! Contact Alvaro! @imac2")
+                    alert("Error adding the score! Contact Alvaro! @imac2");
                 }
-            })
+            });
+        }
+
+        function viewRanking(){
+            var params = {
+                action: 'getUsers',
+                name: $('.gameOver-nameInput').val(),
+                secret_word: $('.gameOver-passwordInput').val()
+            };
+
+            $.get('http://localhost/extensions/experiments/game-ranking/', params, function(result){
+                showRanking(result);
+            });
         }
 
         //to remove
@@ -1057,47 +1153,70 @@
         /**
         * Shows the ranking of players.
         */
-        function showRanking(users){
+        function showRanking(data){
+            var users = data.users;
+
             $('.ranking').show();
             $('.gameOver').fadeOut(1200, function(){
+                $(this).removeClass('active');
                 $('.ranking-centered').addClass('active');
+
+                // 'add score' button won't be loading anymore
+                $('.gameOver-addToRanking-button').removeClass(ACTIVE);
             });
 
-            var currentUser = users.filter(function(user){
-                return user.name == g_username;
-            });
+            if(data.current_user){
+                $('#ranking-position').text(numberWithCommas(data.current_user.rank));
+                $('#ranking-numUsers').text(numberWithCommas(users.length));
+            }else{
+                $('.ranking-info').hide();
+            }
 
-            $('#ranking-position').text(numberWithCommas(currentUser.rank));
-            $('#ranking-numUsers').text(numberWithCommas(users.length));
+            // datatables was already created? We just update its data
+            if($.fn.dataTable.isDataTable('#ranking-table')){
+                var table = $('#ranking-table').DataTable();
 
-            $('#ranking-table').DataTable({
-                //removes default sorting
-                order: [0, 'asc'],
-                bLengthChange: false, //thought this line could hide the LengthMenu
-                bInfo: false,
-                language: {
-                    "search": "Search for your name"
-                },
-                data: users,
-                pageLength: 10,
-                columns: [
-                    {
-                        width: '60px',
-                        data: 'rank'
+                table.clear();
+                table.rows.add(users);
+                table.draw();
+            }
+
+            //initialising datatables for the first time
+            else {
+                $('#ranking-table').DataTable({
+                    //removes default sorting
+                    order: [0, 'asc'],
+                    bLengthChange: false, //thought this line could hide the LengthMenu
+                    bInfo: false,
+                    language: {
+                        "search": "Search for your name"
                     },
-                    { 
-                        width: '70px',
-                        data: 'score' 
-                    },
-                    {
-                        data: 'name'
-                    },
-                    {
-                        width: '150px',
-                        data: 'created'
-                    }
-                ],
-            });
+                    data: users,
+                    pageLength: 10,
+                    columns: [
+                        {
+                            width: '60px',
+                            data: 'rank'
+                        },
+                        { 
+                            width: '70px',
+                            data: 'score' 
+                        },
+                        {
+                            data: 'name'
+                        },
+                        {
+                            width: '150px',
+                            data: 'display_created',
+                            orderData: [4]
+                        },
+                        {
+                            data: 'created',
+                            visible: false
+                        }
+                    ],
+                });
+            }
         }
 
         /**
@@ -1109,18 +1228,43 @@
         }
 
         /**
+        * Showing or hidding the `about` screen
+        */
+        function toggleAbout(){
+            $('.game-about').toggleClass('active');
+        }
+
+        /**
+        * Toggling the sound setting.
+        */
+        function toggleSound(){
+            g_soundEnabled = !g_soundEnabled;
+
+            $(this)
+                .toggleClass('icon-volume-high')
+                .toggleClass('icon-volume-mute2');
+
+            if(!g_soundEnabled){
+                pauseSounds(g_sounds);
+            }
+
+            //background loop
+            else{
+                utils.playSound('background', 'loop');
+            }
+        }
+
+        /**
         * Notification sound for every browser.
         */
         function createSound(fileName){
-            if(g_soundEnabled){
-                g_mysound.push(fileName);
-                var sound;
+            g_mysound.push(fileName);
+            var sound;
 
-                var extension = !isMpeg() ? '.ogg' : '.mp3';
-                sound = new Audio('audio/' + fileName + extension);
+            var extension = !isMpeg() ? '.ogg' : '.mp3';
+            sound = new Audio('audio/' + fileName + extension);
 
-                g_mysound[fileName] = sound;
-            }
+            g_mysound[fileName] = sound;
         }
 
         /**
@@ -1137,7 +1281,9 @@
         */
         function pauseSounds(g_sounds){
             for(var i=0; i<g_sounds.length; i++){
-                g_mysound[g_sounds[i]].pause();
+                if(g_mysound[g_sounds[i]]){
+                    g_mysound[g_sounds[i]].pause();
+                }
             }
         }
 
@@ -1163,7 +1309,7 @@
         self.removeWord = function(random){
             self.g_words.spice(random, 1);
         };
-    }
+    };
 
     gameModel = new fallingWords().init();
     window.game = gameModel;
