@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta name="author" content="Alvaro Trigo Lopez" />
+    <meta name="Resource-type" content="Document" />
+
+    <!--<link href='http://fonts.googleapis.com/css?family=Quicksand|Raleway:400' rel='stylesheet' type='text/css'>-->
+
+    <!-- To display the ranking -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+
+    <script src="jquery.min.js"></script>
+    <style>
+    .explosion{
+        position: absolute;
+        top: 20px;
+        height: 388px;
+        width: 300px;
+        display: block;
+        z-index: 999;
+    }
+    .explosion-anim{
+        height: 388px;
+        width: 300px;
+        display: block;
+        z-index: 999;
+        background-image: url('https://alvarotrigo.com/fallingwords/imgs/anim.png');
+        background-position: 0 0;
+        animation: play_1 300ms steps(5) infinite,
+                   play_2 1200ms steps(4) infinite;
+    }
+    @keyframes play_1 {
+       from{ background-position-x: 0; }
+       to{ background-position-x: -1500px; }
+    }
+    @keyframes play_2 {
+       from{ background-color: 0;- }
+       to{ background-position-y: -1552px; }
+    }
+
+
+    .explosion-missile-anim{
+        height: 100px;
+        width: 100px;
+        display: none;
+        z-index: 999;        
+    }
+    .explosion-missile-anim.active{
+        display: block;
+        background-image: url('imgs/explosion-anim3.png');
+        animation: missileX 200ms steps(5) infinite,
+                   missileY 600ms steps(3) infinite; 
+    }
+    @keyframes missileX {
+       from{ background-position-x: 0; }
+       to{ background-position-x: -500px; }
+    }
+    @keyframes missileY {
+       from{ background-color: 0;- }
+       to{ background-position-y: -300px; }
+    }
+
+
+
+
+  
+    .city-explosion{
+        position: absolute;
+        bottom: -500px;
+        height: 388px;
+        width: 300px;
+        overflow: hidden;
+        z-index: 999;
+        display: none;
+    }
+    .city-explosion:after{
+        content: '';
+        display: inline-block;
+        position: absolute;
+        height: 388px;
+        width: 6000px;
+        background-position: 0 0;
+        background-image: url('imgs/city-explosion.sprite.png');
+        left: 0;
+        top: 0;
+        background-position: 0 0;
+    }
+    .city-explosion.active{
+        display: block;
+        bottom: -20px;
+    }
+    .city-explosion.active:after{
+        display: block;
+        animation: cityAnimX 1200ms steps(19) infinite forwards;
+    }
+    @keyframes cityAnimX {
+       from{ transform: translateX(0); }
+       to{ transform: translateX(-5700px); }
+    }
+
+
+
+
+.city-explosion1{
+    position: absolute;
+    bottom: -200px;
+    height: 388px;
+    width: 300px;
+    z-index: 999;
+    display: none;
+    background-image: url('imgs/anim3.png');
+    background-position: 0 0;
+    background-repeat: no-repeat;
+}
+.city-explosion1.active{
+    display: block;
+    bottom: 500px;
+    animation: play_1 300ms steps(5) 5,
+               play_2 1200ms steps(4) 1 forwards;
+}
+@keyframes play_1 {
+   from{ background-position-x: 0; }
+   to{ background-position-x: -1500px; }
+}
+@keyframes play_2 {
+   from{ background-color: 0;- }
+   to{ background-position-y: -1552px; }
+}
+
+
+.fire{
+    display: block;
+    position: absolute;
+    width: 275px;
+    height: 157px;
+    background-image: url(imgs/fire3 .png);
+    bottom: 7px;
+    left: 0;
+    display: none;
+    animation: fireX 300ms steps(4) infinite,
+               fireY 1800ms steps(6) infinite;
+}
+
+@keyframes fireX {
+   from{ background-position-x: 0; }
+   to{ background-position-x: -1100px; }
+}
+@keyframes fireY {
+   from{ background-color: 0;- }
+   to{ background-position-y: -943px; }
+}
+
+
+    .demo{
+        position: absolute;
+        height: 256px;
+        width: 256px;
+        display: block;
+        z-index: 999;
+        display: block;
+        will-change: background-position-x;
+        bottom: 20px;
+        overflow: hidden;
+    }
+    .demo:after{
+        content: '';
+        display: inline-block;
+        position: absolute;
+         height: 256px;
+        width: 1536px;
+        left: 0;
+        top: 0;
+        background-position: 0 0;
+        transition: all 10000ms ease;
+        will-change: translate;
+        background-image: url('https://cdn-images-1.medium.com/max/2600/1*WhDjw8GiV5o0flBXM4LXEw.png');
+
+    }
+    .demo.active:after {
+        animation: pepe 300ms steps(5) infinite;
+
+    }
+
+    @keyframes pepe {
+       from{ transform: translateX(0); }
+       to{ transform: translateX(-1280px); }
+    }
+
+
+  
+    </style>
+</head>
+<body>
+
+<div class="explosion-missile-anim"></div>
+<!-- <div class="demo"></div> -->
+
+<div class="city-explosion1 active"></div>
+
+<div class="city-explosion active"></div>
+<div class="fire"></div>
+
+<!--
+<div class="explosion-anim"></div>
+<div class="explosion-anim" style="top: 200px;"></div>
+-->
+
+<!--
+<img class="explosion" src="https://alvarotrigo.com/fallingwords/imgs/city-explosion3.gif" />
+<img class="explosion" src="https://alvarotrigo.com/fallingwords/imgs/city-explosion3.gif" style="margin-top: 500px"/>
+-->
+<button>click</button>
+<script type="text/javascript">
+
+    $('.city-explosion1').one("animationend", function(){
+        console.log("weee...");
+    });
+
+
+    var cont = 0;
+    $('button').click(function(){
+        $('.demo').addClass('active');
+        cont++;
+        $('.explosion-missile-anim').toggleClass('active');
+        setTimeout(function(){
+        // $('.explosion-missile-anim').removeClass('active');
+        }, 600)
+        /*
+        var $explosions = document.querySelectorAll('.explosion');
+        $explosions.forEach(function($explosion){
+             $explosion.setAttribute('src', '');
+        });
+        */
+        
+        var $explosion = document.querySelector('.explosion');
+
+        $explosion.style.display = 'none';
+        $explosion.style.display = 'block';
+        $explosion.setAttribute('src', '');
+        setTimeout(function(){
+            $explosion.setAttribute('src', 'https://alvarotrigo.com/fallingwords/imgs/city-explosion3.gif?v='+ cont);
+        }, 0);
+
+    });
+</script>
+
+<!-- To display the ranking -->
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+</body>
+</html>
+    

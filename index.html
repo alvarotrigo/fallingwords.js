@@ -12,7 +12,7 @@
     <!-- To display the ranking -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
 
-    <script src="jquery.min.js"></script>
+    <script src="https://unpkg.com/jquery@3.3.1/dist/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="styles.css" />
 </head>
 <body>
@@ -27,6 +27,9 @@
         <span class="game-info-score">
             Score
             <span class="game-info-score-value"></span>
+            <span class="game-info-score-star active">
+                <i class="icon-star-full" title="Stop game"></i>
+            </span>
         </span>
     </div>
     <div class="game-content">
@@ -49,19 +52,26 @@
 
     <div class="startScreen game-fullscreen">
         <div class="startScreen-centered game-centered">
+            <div class="startScreen-title"></div>
             <button class="startScreen-playButton button">Play</button>
             <a href="https://twitter.com/imac2" class="startScreen-howWasMade">How was it made?</a>
             <a href="https://twitter.com/imac2" class="startScreen-by">By @imac2</a>
             <a href="https://github.com/alvarotrigo/fallingwords.js" title="Github repository" class="startScreen-github">
-                <i class="icon-github"></i>
+                <i class="icon-github hover-sound"></i>
             </a>
         </div>
     </div>
 
     <span class="game-options">
-        <i class="icon-stop" title="Stop game"></i>
-        <i class="icon-volume-high" title="Toggle volume"></i>
-        <i class="icon-info" title="About"></i>
+        <span class="icon game-options-stop hover-sound icon-stop-wrapper">
+            <i class="icon-stop" title="Stop game"></i>
+        </span>
+        <span class="icon game-options-volume hover-sound">
+            <i class="icon-volume-high icon-volume" title="Toggle volume"></i>
+        </span>        
+        <span class="icon game-options-about hover-sound">
+            <i class="icon-info" title="About"></i>
+        </span>
     </span>
 
     <div class="game-about game-fullscreen">
@@ -133,6 +143,7 @@
         </div>
     </div>
 </div>
+<div class="footer">From the creator of <a href="https://alvarotrigo.com/fullPage/">fullPage.js</a>, <a href="https://alvarotrigo.com/pagePiling/">pagePiling.js</a> and <a href="https://alvarotrigo.com/multiScroll/">multiScroll.js</a></div>
 
 <button class="pepe">Click</button>
 <button class="add">Add</button>
@@ -140,20 +151,6 @@
 <script src="actions.js?v=3" type="text/javascript"></script>
 <script type="text/javascript">
 
-    $('.pepe').click(function(){
-
-        var $explosions = document.querySelectorAll('.explosion');
-        $explosions.forEach(function($explosion){
-             $explosion.setAttribute('src', '');
-        });
-
-        var $explosion = document.querySelector('.explosion');
-        setTimeout(function(){
-            $explosion.setAttribute('src', 'imgs/explosion1.gif');
-        }, 1);
-       
-
-    });
 </script>
 
 <!-- To display the ranking -->

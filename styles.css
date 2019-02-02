@@ -110,6 +110,20 @@ body,html{
     color: #fff;
     text-shadow: 1px 1px 1px black;
 }
+.footer{
+    text-align: center;
+    color: #808080;
+    font-size: 0.9em;
+    background-color: white;
+    padding: 7px;
+}
+.footer a{
+    color: #ff3bee;
+    display: inline-block;
+}
+.footer a:hover{
+    border-bottom: 1px solid #ff3bee;
+}
 
 
 /* Game options
@@ -129,21 +143,31 @@ body,html{
     user-select: none;
 
 }
-.game-options i:hover{
+#game.active .game-options i:hover{
     color: black;
 }
 .game-options i{
     cursor: pointer;
-    margin: 0 6px 0 0;
     display: inline-block;
 }
-#game:not(.active) i.icon-stop{
+#game:not(.active) i.icon-stop,
+#game:not(.active) .icon-stop-wrapper{
     display: none;
 }
 #game:not(.active) .game-options{
     margin-top: 9px;
     color: #fff;
     transform: translate3d(-105px, -8px, 0);
+}
+#game.active .game-options .icon{
+    background: transparent;
+    width: auto;
+    height: auto;
+    background: transparent;
+    margin: 0 6px 0 0;
+    padding: 0;
+    border-radius: 0;
+    vertical-align: top;
 }
 
 /* Words
@@ -161,16 +185,11 @@ body,html{
 }
 .word span{
     margin: 0 1px 0 0;
-    border-width: 0px;
-    will-change: color, border-bottom;
-    border-color: #34495e;
-    border-style: solid;
-    transform: translateZ(0);
+    border-bottom: 1px solid transparent;
 }
 .word span.active {
     color: #34495e;
-    border-bottom: 1px;
-
+    border-bottom: 1px solid #34495e;
 }
 
 /* Cities
@@ -200,13 +219,21 @@ body,html{
     background-position: 50% 100%;
     z-index: 99;
 }
-.city.state2{
+.city:after{
+    content: '';
+    display: block;
+    width: 100%;
+    position: absolute;
+    height: 100%;
+    background: red;
+}
+.state2.city:after{
     background: yellow;
 }
-.city.state3{
+.state3.city:after{
     background: orange;
 }
-.city.state4{
+.state4.city:after{
     background: black;
 }
 .city.state2:before{
@@ -238,8 +265,8 @@ body,html{
     color: #fff;
     font-weight: bold;
     font-size: 16px;
-    transition: transform 700ms ease;
-    -webkit-transition: -webkit-transform 700ms ease;
+    transition: transform 700ms linear;
+    -webkit-transition: -webkit-transform 700ms linear;
     background-image: url(imgs/missile3.png);
     height: 115px;
     width: 15px;
@@ -320,9 +347,14 @@ a.startScreen-github:hover{
     left: 0;
     right: 0;
     margin: 0 auto;
-    border-radius: 15px;
-    border: 0;
-    box-shadow: 0px 3px 11px rgba(0,0,0,0.3);
+    display: inline-block;
+    text-decoration: none;
+    color: #fff;
+    padding: 10px;
+    border: 2px solid #fff;
+    box-shadow: 4px 4px rgba(0, 0, 0, 0.4);
+    transform: rotate(5deg);
+    outline: 0;
 }
 .startScreen-playButton:hover{
     background: #e043a7;
@@ -335,11 +367,25 @@ a.startScreen-github:hover{
     color: #fff;
 }
 .startScreen-centered{
-    background-image: url(./imgs/hero.png);
+    background-image: url(./imgs/hero-words.png);
     background-size: cover;
     background-repeat: repeat;
 }
+.startScreen-title{
+    background-image: url(./imgs/falling-words-title.png);
+    width: 750px;
+    height: 148px;
+    position: absolute;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    top: 171px;
+    animation-name: titleAnimation;
+    animation-duration: 20000ms;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
 
+}
 /* Game about
  * --------------------------------------- */
 .game-about{
@@ -531,7 +577,6 @@ a.startScreen-github:hover{
     display: none;
     z-index: 777;
     background: linear-gradient( 135deg, #F05F57 10%, #360940 100%);
-    position: relative;
     color: #f2f2f2;
     z-index: 666;
     opacity: 1;
@@ -651,7 +696,17 @@ span .paginate_button {
 .game-info-score{
     position: absolute;
     right: 0;
-    width:170px;
+    margin: 0 20px 0 0;
+}
+.game-info-score-star{
+    color: yellow;
+    display: inline-block;
+}
+.game-info-score-star.active{
+  animation: bounceAnimation 0.5s;
+  animation-direction: alternate;
+  animation-timing-function: ease-out;
+  animation-iteration-count: 1;
 }
 
 /* Explosions
@@ -659,44 +714,113 @@ span .paginate_button {
 .explosion{
     position: absolute;
     bottom: -200px;
-    height: 82px;
-    width: 120px;
+    height: 106px;
+    width: 106px;
     display: block;
     z-index: 999;
     display: none;
+    background-position: 0 0;
+    background-image: url('imgs/explosion-anim22.png');
+    background-repeat: no-repeat;
 }
 .explosion.active{
     display: block;
+    animation: explosionX 200ms steps(3) 3,
+               explosionY 600ms steps(3) 1 forwards; 
 }
+@keyframes explosionX {
+   from{ background-position-x: 0; }
+   to{ background-position-x: -320px; }
+}
+@keyframes explosionY {
+   from{ background-color: 0;- }
+   to{ background-position-y: -320px; }
+}
+
+
 .city-explosion{
     position: absolute;
     bottom: -500px;
     height: 388px;
     width: 300px;
+    z-index: 999;
+    display: none;
+    background-image: url('imgs/anim3.png');
+    background-position: 0 0;
+    background-repeat: no-repeat;
+}
+.city-explosion.active{
+    display: block;
+    bottom: -20px;
+    animation: play_1 300ms steps(5) 5,
+               play_2 1200ms steps(4) 1 forwards;
+}
+@keyframes play_1 {
+   from{ background-position-x: 0; }
+   to{ background-position-x: -1500px; }
+}
+@keyframes play_2 {
+   from{ background-color: 0;- }
+   to{ background-position-y: -1552px; }
+}
+
+
+/*
+.city-explosion{
+    position: absolute;
+    height: 400px;
+    width: 400px;
     display: block;
     z-index: 999;
     display: block;
+    background-image: url('imgs/2pepe.png');
+    background-position: 0 0;
 }
 .city-explosion.active{
-    bottom: -20px;
+    bottom: -65px;
+    animation: play_1 300ms steps(5) infinite,
+               play_2 1800ms steps(6) infinite;
 }
+@keyframes play_1 {
+   from{ background-position-x: 0; }
+   to{ background-position-x: -2000px; }
+}
+@keyframes play_2 {
+   from{ background-color: 0;- }
+   to{ background-position-y: -2400px; }
+}
+*/
+
 
 /* Fire
  * --------------------------------------- */
 .fire{
     display: block;
     position: absolute;
-    width: 201px;
-    height: 70px;
-    background-image: url(imgs/fire.gif);
-    bottom: 7px;
-    left: 0;
+    width: 275px;
+    height: 157px;
+    background-image: url(imgs/fire3.png);
+    bottom: -35px;
+    left: -39px;
     display: none;
+    animation: fireX 300ms steps(4) infinite,
+               fireY 1800ms steps(6) infinite;
 }
+
+@keyframes fireX {
+   from{ background-position-x: 0; }
+   to{ background-position-x: -1100px; }
+}
+@keyframes fireY {
+   from{ background-color: 0;- }
+   to{ background-position-y: -943px; }
+}
+
 .city.state3 .fire,
 .city.state4 .fire{
     display: block;
 }
+
 
 /* Clouds
  * --------------------------------------- */
@@ -736,17 +860,17 @@ span .paginate_button {
     -webkit-animation-name: moveCloud3;
     -webkit-animation-duration: 20s;
 }
-@-webkit-keyframes moveCloud1 {
+@keyframes moveCloud1 {
     0% { transform: translate3d(5%, 0, 0);}
     50%{ transform: translate3d(30%, 10px, 0);}
     100%{ transform: translate3d(5%, 0, 0);}
 }
-@-webkit-keyframes moveCloud2 {
+@keyframes moveCloud2 {
     0% { transform: translate3d(30%, 0, 0);}
     50%{ transform: translate3d(10%, -20px, 0);}
     100%{transform: translate3d(30%, 0, 0);}
 }
-@-webkit-keyframes moveCloud3 {
+@keyframes moveCloud3 {
     0% { transform: translate3d(70%, 0, 0);}
     50%{ transform: translate3d(20%, 20px, 0);}
     100%{ transform: translate3d(80%, 0, 0);}
@@ -913,7 +1037,9 @@ span .paginate_button {
   -moz-osx-font-smoothing: grayscale;
 }
 
-
+.icon-star-full:before {
+  content: "\e9d9";
+}
 .icon-happy:before {
   content: "\e9df";
 }
@@ -938,23 +1064,26 @@ span .paginate_button {
 
 
 
-/* to do */
+/* to do 
 https://jsfiddle.net/gwoc3796/
-.demo {
-  z-index: 100;
-    position: fixed;
-    bottom: 25px;
-    left: 30px;
-    width: 50px;
-    height: 50px;
+*/
+.icon{
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
     background: #fff;
     border-radius: 50%;
     overflow: hidden;
-    background: rgba(105,45,1,.09);
+    background: rgba(255, 255, 255, 0.36);
+    display: inline-block;
+    padding: 8px;
 }
-.demo:hover{
-     animation: .5s rubberBand;
-    background: rgba(105,45,1,.12);
+.icon:hover{
+    animation: .5s rubberBand;
+    background: rgba(105,45,1,0.6);
+}
+.icon i{
+    font-style: normal;
 }
 
 @-webkit-keyframes rubberBand {
@@ -1017,4 +1146,30 @@ https://jsfiddle.net/gwoc3796/
     -webkit-transform: scaleX(1);
     transform: scaleX(1)
   }
+}
+
+
+@keyframes titleAnimation{
+  0% {
+    transform:  rotate(0deg) scaleX(1.00) scaleY(1.00) ;
+  }
+  25% {
+    transform:  rotate(5deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  50% {
+    transform:  rotate(0deg) scaleX(1.00) scaleY(1.00) ;
+  }
+  74% {
+    transform:  rotate(-5deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  100% {
+    transform:  rotate(0deg) scaleX(1.00) scaleY(1.00) ;
+  }
+}
+
+
+@keyframes bounceAnimation {
+  0% { transform: translate3d(0, 0, 0);     }
+  50%   { transform: translate3d(0, -20px, 0) scaleX(1.30) scaleY(1.30); }
+  100%   { transform: translate3d(0, 0, 0); }
 }
