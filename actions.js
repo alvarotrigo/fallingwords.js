@@ -1,5 +1,5 @@
 /*!
- * Falling Words Game 1.0.1
+ * Falling Words Game 1.0.2
  * https://github.com/alvarotrigo/fallingwords.js
  * @license MIT licensed
  *
@@ -29,6 +29,8 @@
         'city-explosion': null
     };
     var g_localStorageKey = 'alvaro_fallingwords';
+    var g_baseURL= 'https://alvarotrigo.com/fallingwords/';
+    var g_baseURL_backend= 'https://alvarotrigo.com/fallingwords/backend/';
 
     //the amount of pixels that a word moves 
     var g_wordSpace = 651;
@@ -37,6 +39,7 @@
     var g_missileSpace = 600; 
     var g_missileVelocity = g_missileSpace / 700;
     var g_missileY;
+    var g_gamePositionTop = $('#game')[0].getBoundingClientRect().top;
 
     //polify
     var requestAnimFrame = window.requestAnimationFrame ||
@@ -86,8 +89,6 @@
         * Removes active class from the given element.
         */
         removeActive: function(){
-            console.log("----------------");
-            console.log(this);
             $(this).removeClass(ACTIVE);
         }
     };
@@ -131,12 +132,8 @@
         * Missile hitting the word
         */
         self.checkCollision = function(){
-            console.log("---------------");
             g_wordY =  1 + g_wordVelocity * (Date.now() - self.word.timeWhenFired);
             g_missileY = (531+115) - (0 + g_missileVelocity * (Date.now() - self.timeWhenFired));
-
-            console.log(g_missileY + ' vs ' + g_wordY);
-            console.log(self.$missile[0].getBoundingClientRect().top  + ' vs ' + self.word.$word[0].getBoundingClientRect().top);
             
             if( self.$missile[0].getBoundingClientRect().top <= self.word.$word[0].getBoundingClientRect().top ){
                 utils.playSound('destroyWord');
@@ -255,7 +252,7 @@
             var $explosion = $('.explosion').not(ACTIVE_SEL).first();
 
             var params = {
-                top: self.$word[0].getBoundingClientRect().top - gameModel.g_explosionDimensions.height/2,
+                top: self.$word[0].getBoundingClientRect().top - gameModel.g_explosionDimensions.height/2 - g_gamePositionTop,
                 left: self.left + self.width / 2 - gameModel.g_explosionDimensions.width/2,
             };
 
@@ -436,7 +433,7 @@
         */
         self.createExplosion = function(){
             //city explosions
-            for(var i = 0; i < 3; i++){
+            for(var i = 0; i < 4; i++){
                 var cityExplosion = document.createElement('div');
                 var left = self.left + self.width / 2 - self.g_cityExplosionDimensions.width/2;
     
@@ -458,18 +455,18 @@
         * Exploding the city.
         */
         self.explode = function(){
-            console.log("###############################");
             self.activeExplosion = self.explosions.filter(function(explosion){
                 return !explosion.isVisible;
             })[0];
-            console.log(self.activeExplosion);
 
-            self.activeExplosion.isVisible = true;
+            if(self.activeExplosion){
+                self.activeExplosion.isVisible = true;
 
-            $activeExplosion = self.activeExplosion.item;
-            $activeExplosion.classList.add(ACTIVE);
+                $activeExplosion = self.activeExplosion.item;
+                $activeExplosion.classList.add(ACTIVE);
 
-            self.shake();
+                self.shake();
+            }
         };
 
         self.onExplosionEnds = function(){
@@ -477,8 +474,6 @@
             var currentExplosion = self.explosions.filter(function(explosion){
                 return explosion.isVisible && explosion.item.isEqualNode(el);
             })[0];
-
-            console.log(currentExplosion);
 
             if(currentExplosion){
                 currentExplosion.isVisible = false;
@@ -508,7 +503,7 @@
             if( self.impacts >= g_limitImpacts){
                 self.$city[0].classList.add('state4')
                 self.$city[0].classList.remove('state3');
-                console.error("removing city....");
+
                 //delete game.g_cities[key];
                 gameModel.removeCity(self);
             }
@@ -541,6 +536,7 @@
         var g_isGamePaused = false;
         var g_isGameOver = false;
         var g_hasGameStarted = false;
+        var g_isMp3Supported = isMpeg();
 
         self.g_cities = [];
         self.g_words = [];
@@ -564,7 +560,7 @@
 
             //testing levels
             '-2': {
-                speed: 80,
+                speed: 18,
                 fallingLapse: 200,
                 words: 40
             },
@@ -718,12 +714,18 @@
                 .on('click', '.gameOver-viewRanking', viewRanking)
                 .on('click', '.game-options-volume', toggleSound)
                 .on('click', '.game-options-about, .game-about-back', toggleAbout)
+                .on('keyup', '.gameOver-nameInput', isUsernameAvailable)
                 .on('mouseenter', '.hover-sound', playOverSound)
+                .on('resize', resizeHandler)
                 .on('click', '.icon-stop', function(){
                     gameOver();
                     $('.startScreen').show();
 
                 });
+        }
+
+        function resizeHandler(){
+            g_gamePositionTop = $('#game')[0].getBoundingClientRect().top;
         }
 
         /**
@@ -816,9 +818,6 @@
 
                 //removing the word from our words array
                 g_wordsList.splice(wordIndex, 1);
-
-                console.log("word index: " + wordIndex);
-                console.log(g_wordsList);
             }
         }
 
@@ -1062,7 +1061,7 @@
             var sessionData = localStorage.getItem(g_localStorageKey);
             if(sessionData){
                 var userData = JSON.parse(sessionData);
-                $('.gameOver-nameInput, .gameOver-passwordInput, .gameOver-notice').hide().removeAttr('required');
+                $('.gameOver-nameInput, .gameOver-passwordInput, .gameOver-password-info').hide().removeAttr('required');
                 $('.gameOver-nameInput').val(userData.name);
                 $('.gameOver-passwordInput').val('nothing');
                 $('.gameOver-sessionUser').html("as <span>" + userData.name + '</span><span class="gameOver-logout">| Logout</span>').show();
@@ -1072,58 +1071,15 @@
         }
 
         function logout(){
-            $.get('http://localhost/extensions/experiments/game-ranking/?action=logout', function(result){
+            $.get(g_baseURL_backend + '?action=logout', function(result){
                 localStorage.removeItem(g_localStorageKey);
-                $('.gameOver-nameInput, .gameOver-passwordInput, .gameOver-notice').show();
+                $('.gameOver-nameInput, .gameOver-passwordInput, .gameOver-password-info').show();
                 $('.gameOver-nameInput, .gameOver-passwordInput').prop('required', true);
                 $('.gameOver-nameInput').val('');
                 $('.gameOver-passwordInput').val('');
                 $('.gameOver-sessionUser').hide();
             });
         }
-
-        self.test = function(){
-            var result = {
-                message: "Your score has been added to the ranking!",
-                success: true,
-                users: [
-                    {id: "5", name: "alvaro", score: "1000", display_created: "1pepe", created: "2018-12-07 16:54:58"},
-                    {id: "6", name: "alvaro", score: "1000", display_created: "8pepe", created: "2018-12-07 16:56:54"},
-                    {id: "7", name: "alvaro", score: "1000", display_created: "3pepe", created: "2018-12-10 13:27:04"},
-                    {id: "8", name: "alvaro", score: "1000", display_created: "9pepe", created: "2018-12-10 13:28:14"},
-                    {id: "9", name: "pepito", score: "1000", display_created: "5pepe", created: "2018-12-10 13:33:41"},
-                    {id: "10", name: "juanito", score: "1000", display_created: "7pepe", created: "2018-12-10 13:58:11"},
-                    {id: "11", name: "fadsfaf", score: "0", display_created: "8pepe", created: "2018-12-07 16:24:52"},
-                    {id: "12", name: "fdasfa", score: "0", display_created: "6pepe", created: "2018-12-07 16:45:19"},
-                    {id: "13", name: "alvaro", score: "0", display_created: "3pepe", created: "2018-12-07 16:45:39"},
-                    {id: "14", name: "alvaro", score: "1000", display_created: "1pepe", created: "2018-12-07 16:56:54"},
-                    {id: "15", name: "alvaro", score: "1000", display_created: "7pepe", created: "2018-12-10 13:27:04"},
-                    {id: "16", name: "alvaro", score: "1000", display_created: "2pepe", created: "2018-12-10 13:28:14"},
-                    {id: "17", name: "pepito", score: "1000", display_created: "8pepe", created: "2018-12-10 13:33:41"},
-                    {id: "18", name: "juanito", score: "1000", display_created: "pepe", created: "2018-12-10 13:58:11"},
-                    {id: "19", name: "fadsfaf", score: "0", display_created: "9pepe", created: "2018-12-07 16:24:52"},
-                    {id: "20", name: "fdasfa", score: "0", display_created: "6pepe", created: "2018-12-07 16:45:19"},
-                    {id: "21", name: "alvaro", score: "0", display_created: "2pepe", created: "2018-12-07 16:45:39"}
-                ]
-            };
-
-            if(result.success){
-                if(result.message){
-                    $g_gameOver.find('.gameOver-message').html(result.message);
-
-                    //adding the ranking column
-                    result.users.map(function(user, index){
-                        user.rank = index + 1;
-                    });
-
-                    $('.gameOver-addToRanking-button').removeClass(ACTIVE);
-
-                    showRanking(result.users);
-                }
-            }else{
-                alert("Error adding the score! Contact Alvaro! @imac2");
-            }
-        };
 
         /**
         * Saving the score of the game.
@@ -1139,6 +1095,11 @@
                 return;
             }
 
+            //any error? Bye bye my friend!
+            if($('.input-error').length){
+                return;
+            }
+
             $addScoreButton.addClass(ACTIVE);
 
             var params = {
@@ -1150,7 +1111,7 @@
             //saving the users info
             localStorage.setItem(g_localStorageKey, JSON.stringify({name: params.name, secret_word: params.secret_word}));
 
-            $.post('http://localhost/extensions/experiments/game-ranking/?action=save', params, function(result){
+            $.post(g_baseURL_backend + '?action=save', params, function(result){
                 if(result.success){
                     if(result.message){
                         $g_gameOver.find('.gameOver-message').text(result.message);
@@ -1163,14 +1124,37 @@
             });
         }
 
+        /**
+        * Checks if the username is available.
+        */
+        function isUsernameAvailable(){
+            clearTimeout(self.g_intervals.isUsernameAvailableId)
+            var $input = $(this);
+            var inputText = $input.val();
+
+            self.g_intervals.isUsernameAvailableId = setTimeout(function(){
+                $.get(g_baseURL_backend + '?action=isUsernameAvailable', {name: inputText}, function(result){
+                    if(result.is_available){
+                        $input.removeClass('input-error').addClass('input-ok');
+                    }
+                    else{
+                        $input.removeClass('input-ok').addClass('input-error');
+                    }
+                    $('.gameOver-invalidName').toggle(!result.is_available);
+                });
+            }, 300);
+        }
+
+        /**
+        * Shows the ranking.
+        */
         function viewRanking(){
             var params = {
                 action: 'getUsers',
-                name: $('.gameOver-nameInput').val(),
-                secret_word: $('.gameOver-passwordInput').val()
+                name: $('.gameOver-nameInput').val()
             };
 
-            $.get('http://localhost/extensions/experiments/game-ranking/', params, function(result){
+            $.get(g_baseURL_backend, params, function(result){
                 showRanking(result);
             });
         }
@@ -1219,7 +1203,8 @@
                         },
                         { 
                             width: '70px',
-                            data: 'score' 
+                            data: 'score',
+                            render: $.fn.dataTable.render.number( '.', ',')
                         },
                         {
                             data: 'name'
@@ -1290,8 +1275,8 @@
         * Notification sound for every browser.
         */
         function createSound(fileName){
-            var extension = !isMpeg() ? '.ogg' : '.mp3';
-            var sound = new Audio('audio/' + fileName + extension);
+            var extension = g_isMp3Supported ? '.mp3' : '.ogg';
+            var sound = new Audio(g_baseURL + 'audio/' + fileName + extension);
 
             g_sounds[fileName] = sound;
         }
@@ -1341,5 +1326,4 @@
     };
 
     gameModel = new fallingWords().init();
-    window.game = gameModel;
 })(jQuery);

@@ -13,7 +13,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
 
     <script src="https://unpkg.com/jquery@3.3.1/dist/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <link rel="stylesheet" type="text/css" href="styles.css?v=6" />
 </head>
 <body>
 
@@ -54,9 +54,9 @@
         <div class="startScreen-centered game-centered">
             <div class="startScreen-title"></div>
             <button class="startScreen-playButton button">Play</button>
-            <a href="https://twitter.com/imac2" class="startScreen-howWasMade">How was it made?</a>
-            <a href="https://twitter.com/imac2" class="startScreen-by">By @imac2</a>
-            <a href="https://github.com/alvarotrigo/fallingwords.js" title="Github repository" class="startScreen-github">
+            <a href="https://alvarotrigo.com/blog/creating-a-html-game-with-css-transitions-and-javascript/" class="startScreen-howWasMade" target="_blank">How was it made?</a>
+            <a href="https://twitter.com/imac2" target="_blank" class="startScreen-by">By @imac2</a>
+            <a href="https://github.com/alvarotrigo/fallingwords.js" target="_blank" title="Github repository" class="startScreen-github">
                 <i class="icon-github hover-sound"></i>
             </a>
         </div>
@@ -77,8 +77,8 @@
     <div class="game-about game-fullscreen">
         <a href="#" class="game-about-back"><< Back</a>
         <h1>FallingWords.js</h1>
-        <h2>Created by <a href="https://twitter.com/imac2">Alvaro Trigo</a></h2>
-        <h3>Available <a href="https://github.com/alvarotrigo/fallingwords.js">at Github</a></h3>
+        <h2>Created by <a href="https://twitter.com/imac2" target="_blank">Alvaro Trigo</a></h2>
+        <h3>Available <a href="https://github.com/alvarotrigo/fallingwords.js" target="_blank">at Github</a></h3>
 
         <h2 class="game-about-instructions">Instructions</h2>
         <p>The world is getting invaded by very evil words.</p>
@@ -103,10 +103,13 @@
                 <p class="gameOver-sessionUser"></p>
                 <p>
                     <input class="gameOver-textInput gameOver-nameInput" type="text" name="name" id="name" placeholder="Your name" required/>
-                    <input class="gameOver-textInput gameOver-passwordInput" type="text" name="secretWord" id="secretWord" placeholder="Choose a secret word" required/>
-                    <span class="gameOver-notice">
-                        Kind of like a password but not encripted. It is used to overwrite your score if you do better next time and so others can't overwrite your own score using the same name as you. 
-                    </span>
+                    <div class="gameOver-notice gameOver-invalidName">
+                        This name is taken. Please choose another one. 
+                    </div>
+                    <input class="gameOver-textInput gameOver-passwordInput" type="password" name="secretWord" id="secretWord" placeholder="Choose a password" required/>
+                    <div class="gameOver-notice gameOver-password-info">
+                        Password is required so others won't overwrite your score. 
+                    </div>
 
                     <button class="gameOver-addToRanking-button button" type="submit">
                         <div class="gameOver-addToRanking-loading"></div>
@@ -143,15 +146,9 @@
         </div>
     </div>
 </div>
-<div class="footer">From the creator of <a href="https://alvarotrigo.com/fullPage/">fullPage.js</a>, <a href="https://alvarotrigo.com/pagePiling/">pagePiling.js</a> and <a href="https://alvarotrigo.com/multiScroll/">multiScroll.js</a></div>
+<div class="footer">From the creator of <a href="https://alvarotrigo.com/fullPage/" target="_blank">fullPage.js</a>, <a href="https://alvarotrigo.com/pagePiling/" target="_blank">pagePiling.js</a> and <a href="https://alvarotrigo.com/multiScroll/" target="_blank">multiScroll.js</a></div>
 
-<button class="pepe">Click</button>
-<button class="add">Add</button>
-
-<script src="actions.js?v=3" type="text/javascript"></script>
-<script type="text/javascript">
-
-</script>
+<script src="actions.js?v=7" type="text/javascript"></script>
 
 <!-- To display the ranking -->
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>

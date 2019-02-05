@@ -70,11 +70,24 @@ abbr,acronym { border: 0;
 
 /* Game
  * --------------------------------------- */
+html{
+    display: table;
+}
 body,html{
     font-family: arial;
     color: #333;
     font-size: 16px;
     font-family: "Raleway", Helvetica, Arial, "Lucida Grande", sans-serif !important;
+    height: 100%;
+    width: 100%;
+}
+body{
+    display: table-cell;
+    background: url(imgs/background.png);
+    background-position: bottom left;
+    background-size: cover;
+    vertical-align: middle;
+    text-align: center;
 }
 #game {
     font-size: 19px;
@@ -82,7 +95,6 @@ body,html{
     margin: 0 auto;
     padding:0;
     height: 650px;
-    border-bottom: 4px solid #d8d8d8;
     display:block;
     position: relative;
     overflow: hidden;
@@ -114,7 +126,6 @@ body,html{
     text-align: center;
     color: #808080;
     font-size: 0.9em;
-    background-color: white;
     padding: 7px;
 }
 .footer a{
@@ -540,6 +551,28 @@ a.startScreen-github:hover{
 .gameOver-addToRanking-button.active .gameOver-addToRanking-addScore{
     display: none;
 }
+.gameOver-notice{
+    font-size: 12px;
+    background: rgba(0,0,0,0.6);
+    padding: 5px 15px;
+    color: #fff;
+    font-size: 13px;
+    display: block;
+    width: 450px;
+    margin: 0 auto;
+}
+.input-error{
+    background: #e84040;
+    color: white;
+    border-color: #8c0f0f;
+}
+.input-ok{
+    background: #97f5b8;
+    color: #888;
+}
+.gameOver-invalidName{
+    display: none;
+}
 @-webkit-keyframes spin {
   0% {
     -webkit-transform: rotate(0deg);
@@ -560,16 +593,6 @@ a.startScreen-github:hover{
             transform: rotate(360deg);
   }
 }
-.gameOver-notice{
-    font-size: 12px;
-    background: rgba(0,0,0,0.6);
-    padding: 5px 15px;
-    color: #fff;
-    font-size: 13px;
-    display: block;
-    width: 450px;
-    margin: 0 auto;
-}
 
 /* Ranking
  * --------------------------------------- */
@@ -585,6 +608,7 @@ a.startScreen-github:hover{
     color: #f2f2f2;
     font-weight:bold;
     font-size: 4em;
+    margin: 0.5em 0 0.34em 0;
 }
 .ranking-centered{
     text-align:center;
@@ -597,7 +621,7 @@ a.startScreen-github:hover{
 }
 .ranking-info{
     font-size: 1.7em;
-    margin: 14px 0 40px 0;
+    margin: 0px 0 1px 0;
 }
 .ranking-position{
     font-size: 2.2em;
@@ -670,6 +694,7 @@ span .paginate_button {
 /* Game Info
  * --------------------------------------- */
 .game-info{
+    text-align: left;
     position: absolute;
     transform: translate3d(0, -50px, 0);
     left: 0;
@@ -784,7 +809,7 @@ span .paginate_button {
 @keyframes play_1 {
    from{ background-position-x: 0; }
    to{ background-position-x: -2000px; }
-}
+}   
 @keyframes play_2 {
    from{ background-color: 0;- }
    to{ background-position-y: -2400px; }
