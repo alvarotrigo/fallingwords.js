@@ -171,7 +171,7 @@
     */
     function word(wordText){
         var self = this;
-        var g_easing = 'linear';
+        var g_easing = 'ease-out';
         var g_explosionImage = 'imgs/explosion.gif';
 
         self.$word = null;
